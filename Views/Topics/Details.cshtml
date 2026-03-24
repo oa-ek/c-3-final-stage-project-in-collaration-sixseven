@@ -1,0 +1,5 @@
+@model ZNOWay.Models.Topic
+@{ ViewData["Title"] = "����� ����"; }
+<h2>@Model.Name</h2>
+<p>�������: @Model.Subject?.Name</p>
+<a asp-action="Index" class="btn btn-secondary">�����</a>

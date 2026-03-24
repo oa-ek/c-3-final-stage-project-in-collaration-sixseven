@@ -1,0 +1,9 @@
+@model ZNOWay.Models.Test
+@{ ViewData["Title"] = "�������� ����"; }
+<h2>�������� ����?</h2>
+<p>�����: <strong>@Model.Name</strong></p>
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">��������</button>
+    <a asp-action="Index" class="btn btn-secondary">���������</a>
+</form>

@@ -1,0 +1,20 @@
+@model IEnumerable<ZNOWay.Models.Question>
+@{ ViewData["Title"] = "�������"; }
+<h2>�������</h2>
+<a asp-action="Create" class="btn btn-primary mb-3">+ ������ �������</a>
+<table class="table">
+    <thead><tr><th>�����</th><th>���</th><th>����</th><th></th></tr></thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>@item.Text</td>
+            <td>@item.Type</td>
+            <td>@item.Test?.Name</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">����������</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">��������</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

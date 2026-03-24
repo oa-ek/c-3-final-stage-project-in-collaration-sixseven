@@ -1,0 +1,47 @@
+﻿@model ZNOWay.ViewModels.ResultViewModel
+@{
+    ViewData["Title"] = "Result";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+        <div class="card shadow text-center">
+            <div class="card-header bg-success text-white">
+                <h3>Результат тесту</h3>
+            </div>
+            <div class="card-body">
+                <h4 class="mb-3">@Model.TestName</h4>
+
+                <div class="display-4 fw-bold text-primary mb-3">
+                    @Model.Percentage%
+                </div>
+
+                <p class="fs-5">
+                    Правильних відповідей:
+                    <strong>@Model.Score з @Model.TotalQuestions</strong>
+                </p>
+
+                @if (Model.Percentage >= 75)
+                {
+                    <div class="alert alert-success">Відмінний результат!</div>
+                }
+                else if (Model.Percentage >= 50)
+                {
+                    <div class="alert alert-warning">Непоганий результат!</div>
+                }
+                else
+                {
+                    <div class="alert alert-danger">Варто ще попрактикуватись!</div>
+                }
+            </div>
+            <div class="card-footer">
+                <a asp-controller="Tests" asp-action="Index" class="btn btn-primary">
+                    До списку тестів
+                </a>
+                <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">
+                    На головну
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
