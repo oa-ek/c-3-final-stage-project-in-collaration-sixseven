@@ -1,0 +1,164 @@
+@model ZNOWay.ViewModels.TestRunViewModel
+@{
+    ViewData["Title"] = "Старт тесту";
+    Layout = "_Layout";
+}
+
+@section Styles {
+<style>
+    .start-wrap {
+        min-height: calc(100vh - 140px);
+        display: flex; align-items: center; justify-content: center;
+        padding: 48px 20px;
+    }
+    .start-card {
+        background: #fff; border: 1px solid #e2e8f0;
+        border-radius: 16px; width: 100%; max-width: 520px;
+        overflow: hidden;
+        box-shadow: 0 8px 32px rgba(0,0,0,.08);
+        animation: fadeUp .45s ease both;
+    }
+    @@keyframes fadeUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    .start-header {
+        padding: 36px 40px 28px;
+        border-bottom: 1px solid #e2e8f0;
+        background: linear-gradient(135deg, rgba(58,123,213,.04), transparent);
+    }
+    .start-subject {
+        font-size: .75rem; font-weight: 700; letter-spacing: .1em;
+        text-transform: uppercase; color: #3a7bd5;
+        margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+    }
+    .start-title { font-size: 1.4rem; font-weight: 800; line-height: 1.25; color: #1e293b; }
+    .start-meta {
+        display: grid; grid-template-columns: repeat(3, 1fr);
+        border-bottom: 1px solid #e2e8f0;
+    }
+    .meta-cell {
+        padding: 22px 16px; text-align: center;
+        border-right: 1px solid #e2e8f0;
+        display: flex; flex-direction: column; align-items: center; gap: 8px;
+    }
+    .meta-cell:last-child { border-right: none; }
+    .meta-icon {
+        width: 40px; height: 40px; border-radius: 8px;
+        display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+    }
+    .meta-icon.blue   { background: rgba(58,123,213,.1); color: #3a7bd5; }
+    .meta-icon.green  { background: rgba(39,174,96,.1);  color: #27ae60; }
+    .meta-icon.amber  { background: rgba(245,158,11,.1); color: #f59e0b; }
+    .meta-icon.purple { background: rgba(139,92,246,.1); color: #8b5cf6; }
+    .meta-val { font-size: 1rem; font-weight: 800; color: #1e293b; line-height: 1; }
+    .meta-lbl { font-size: .72rem; color: #64748b; }
+    .start-tips { padding: 22px 40px; border-bottom: 1px solid #e2e8f0; }
+    .tips-title {
+        font-size: .72rem; font-weight: 700; letter-spacing: .08em;
+        text-transform: uppercase; color: #64748b; margin-bottom: 12px;
+    }
+    .tip-item {
+        display: flex; align-items: center; gap: 10px;
+        font-size: .83rem; color: #64748b; margin-bottom: 8px;
+    }
+    .tip-dot {
+        width: 6px; height: 6px; border-radius: 50%;
+        background: #3a7bd5; flex-shrink: 0;
+    }
+    .start-action { padding: 24px 40px; }
+    .btn-start {
+        display: flex; align-items: center; justify-content: center; gap: 12px;
+        width: 100%; background: #27ae60; color: #fff; border: none;
+        border-radius: 8px; padding: 15px 28px;
+        font-weight: 800; font-size: 1rem; text-decoration: none;
+        cursor: pointer; transition: all .2s; font-family: inherit;
+    }
+    .btn-start:hover {
+        background: #1e8449; color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(39,174,96,.35);
+    }
+    .back-link {
+        display: block; text-align: center; margin-top: 14px;
+        font-size: .82rem; color: #64748b; text-decoration: none; transition: color .15s;
+    }
+    .back-link:hover { color: #1e293b; }
+    @@media (max-width: 480px) {
+        .start-header, .start-tips, .start-action { padding-left: 20px; padding-right: 20px; }
+        .start-title { font-size: 1.15rem; }
+    }
+</style>
+}
+
+<div class="start-wrap">
+    <div class="start-card">
+
+        <div class="start-header">
+            <div class="start-subject">
+                <i class="bi bi-book"></i> @Model.SubjectName
+            </div>
+            <div class="start-title">@Model.TestName</div>
+        </div>
+
+        <div class="start-meta">
+            <div class="meta-cell">
+                <div class="meta-icon blue"><i class="bi bi-question-circle"></i></div>
+                <div class="meta-val">@Model.TotalQuestions</div>
+                <div class="meta-lbl">питань</div>
+            </div>
+            <div class="meta-cell">
+                @if (Model.TimeLimit.HasValue)
+                {
+                    <div class="meta-icon amber"><i class="bi bi-clock"></i></div>
+                    <div class="meta-val">@Model.TimeLimit хв</div>
+                    <div class="meta-lbl">ліміт часу</div>
+                }
+                else
+                {
+                    <div class="meta-icon green"><i class="bi bi-infinity"></i></div>
+                    <div class="meta-val">∞</div>
+                    <div class="meta-lbl">без ліміту</div>
+                }
+            </div>
+            <div class="meta-cell">
+                <div class="meta-icon purple"><i class="bi bi-bar-chart-line"></i></div>
+                <div class="meta-val">100–200</div>
+                <div class="meta-lbl">шкала НМТ</div>
+            </div>
+        </div>
+
+        <div class="start-tips">
+            <div class="tips-title">Підказки</div>
+            <div class="tip-item">
+                <div class="tip-dot"></div>
+                Клавіші <strong style="color:#1e293b">A–D</strong> для вибору відповіді
+            </div>
+            <div class="tip-item">
+                <div class="tip-dot"></div>
+                <strong style="color:#1e293b">Enter</strong> — перейти до наступного питання
+            </div>
+            @if (Model.TimeLimit.HasValue)
+            {
+                <div class="tip-item">
+                    <div class="tip-dot" style="background:#f59e0b"></div>
+                    Таймер <strong style="color:#f59e0b">жовтіє</strong> за 2 хв і
+                    <strong style="color:#f43f5e">червоніє</strong> за 30 сек
+                </div>
+            }
+        </div>
+
+        <div class="start-action">
+            <a asp-action="Question"
+               asp-route-testId="@Model.TestId"
+               asp-route-questionIndex="0"
+               class="btn-start">
+                <i class="bi bi-play-fill"></i> Почати тест
+            </a>
+            <a asp-controller="Tests" asp-action="Index" class="back-link">
+                <i class="bi bi-arrow-left"></i> Повернутись до тестів
+            </a>
+        </div>
+
+    </div>
+</div>

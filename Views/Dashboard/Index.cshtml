@@ -1,0 +1,299 @@
+@model DashboardViewModel
+@{
+    ViewData["Title"] = "Мій кабінет";
+    ViewData["ActivePage"] = "Dashboard";
+}
+
+<style>
+    .dash-wrap { padding: 40px 0 60px; }
+
+    /* ─── GREETING ─── */
+    .greeting-block {
+        display: flex; align-items: center; justify-content: space-between;
+        flex-wrap: wrap; gap: 16px; margin-bottom: 36px;
+    }
+    .greeting-block h1 { font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; }
+    .greeting-block h1 span { color: var(--clr-accent); }
+    .greeting-block p { color: var(--clr-muted); margin-top: 4px; }
+
+    /* ─── SCORE CARD ─── */
+    .score-card {
+        background: var(--clr-card);
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius);
+        padding: 28px;
+        position: relative; overflow: hidden;
+    }
+    .score-card::before {
+        content: '';
+        position: absolute; inset: 0;
+        background: radial-gradient(ellipse 80% 60% at 100% 0%, rgba(79,138,255,.12), transparent);
+        pointer-events: none;
+    }
+    .score-label { font-size: .8rem; color: var(--clr-muted); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+    .score-value {
+        font-family: var(--font-display); font-size: 3.5rem; font-weight: 900; line-height: 1.1;
+        background: linear-gradient(135deg, var(--clr-accent), var(--clr-accent2));
+          
+    }
+    .score-range { color: var(--clr-muted); font-size: .85rem; margin-top: 4px; }
+    .score-bar-wrap { margin-top: 20px; }
+    .score-bar-track {
+        height: 12px; background: var(--clr-border);
+        border-radius: 99px; overflow: hidden; position: relative;
+    }
+    .score-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--clr-accent), var(--clr-accent2));
+        border-radius: 99px;
+        transition: width 1s cubic-bezier(.4,0,.2,1);
+    }
+    .score-bar-labels {
+        display: flex; justify-content: space-between;
+        color: var(--clr-muted); font-size: .75rem; margin-top: 6px;
+    }
+
+    /* ─── STAT MINI CARDS ─── */
+    .stat-mini {
+        background: var(--clr-card);
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius);
+        padding: 22px 20px;
+        display: flex; align-items: center; gap: 16px;
+    }
+    .stat-mini-icon {
+        width: 46px; height: 46px; border-radius: var(--radius-sm);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.25rem; flex-shrink: 0;
+    }
+    .stat-mini-num { font-family: var(--font-display); font-size: 1.6rem; font-weight: 900; line-height: 1; }
+    .stat-mini-label { color: var(--clr-muted); font-size: .8rem; margin-top: 3px; }
+
+    /* ─── PROGRESS CHART ─── */
+    .chart-card {
+        background: var(--clr-card); border: 1px solid var(--clr-border);
+        border-radius: var(--radius); padding: 28px;
+    }
+    .chart-card h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; margin-bottom: 4px; }
+    .chart-card .chart-sub { color: var(--clr-muted); font-size: .83rem; margin-bottom: 24px; }
+
+    /* ─── SUBJECT PROGRESS ─── */
+    .subject-row {
+        display: flex; align-items: center; gap: 14px;
+        padding: 14px 0; border-bottom: 1px solid var(--clr-border);
+    }
+    .subject-row:last-child { border-bottom: none; }
+    .subject-row .subj-icon { font-size: 1.3rem; width: 36px; text-align: center; }
+    .subject-row .subj-name { font-weight: 600; font-size: .9rem; min-width: 130px; }
+    .subject-row .subj-bar { flex: 1; }
+    .subject-row .subj-pct { font-family: var(--font-display); font-weight: 700; font-size: .9rem; min-width: 40px; text-align: right; }
+
+    /* ─── HISTORY ─── */
+    .history-item {
+        display: flex; align-items: center; gap: 14px;
+        padding: 14px 0; border-bottom: 1px solid var(--clr-border);
+        text-decoration: none; color: var(--clr-text);
+        transition: background .15s; border-radius: var(--radius-sm);
+        margin: 0 -8px; padding-left: 8px; padding-right: 8px;
+    }
+    .history-item:last-child { border-bottom: none; }
+    .history-item:hover { background: var(--clr-hover); color: var(--clr-text); }
+    .history-score-circle {
+        width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center;
+        font-family: var(--font-display); font-weight: 900; font-size: .85rem;
+        border: 2px solid;
+    }
+    .history-score-circle.great { border-color: var(--clr-success); color: var(--clr-success); background: rgba(34,197,94,.1); }
+    .history-score-circle.ok    { border-color: var(--clr-warn);    color: var(--clr-warn);    background: rgba(245,158,11,.1); }
+    .history-score-circle.bad   { border-color: #f87171;            color: #f87171;            background: rgba(248,113,113,.1); }
+    .history-info { flex: 1; min-width: 0; }
+    .history-info .h-name { font-weight: 600; font-size: .9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .history-info .h-meta { color: var(--clr-muted); font-size: .78rem; margin-top: 2px; }
+    .history-arrow { color: var(--clr-muted); }
+</style>
+
+<div class="dash-wrap">
+<div class="container">
+
+    <!-- Greeting -->
+    <div class="greeting-block">
+        <div>
+            <h1>Привіт, <span>@User.Identity?.Name?.Split('@')[0]</span> 👋</h1>
+            <p>Продовжуй підготовку — ти на правильному шляху!</p>
+        </div>
+        <a href="/Tests" class="btn-zno btn-primary-zno">
+            <i class="bi bi-play-fill"></i> Пройти тест
+        </a>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Score Card -->
+        <div class="col-lg-4">
+            <div class="score-card h-100">
+                <div class="score-label">Прогноз балу НМТ</div>
+                <div class="score-value" id="scoreValue">@(Model?.PredictedScore ?? 142)</div>
+                <div class="score-range">зі 100 до 200 балів</div>
+                <div class="score-bar-wrap">
+                    <div class="score-bar-track">
+                        <div class="score-bar-fill" id="scoreBar"
+                             style="width: @(((Model?.PredictedScore ?? 142) - 100) / 1.0)%"></div>
+                    </div>
+                    <div class="score-bar-labels"><span>100</span><span>150</span><span>200</span></div>
+                </div>
+                <div style="margin-top:20px; padding-top:20px; border-top:1px solid var(--clr-border)">
+                    <div style="color:var(--clr-muted); font-size:.8rem; margin-bottom:8px">Оцінка за останні 10 тестів</div>
+                    <div style="display:flex; gap:6px; align-items:flex-end; height:40px">
+                        @foreach (var b in new[] { 65, 72, 68, 80, 75, 83, 79, 88, 85, 91 })
+                        {
+                            <div style="@('flex:1; background:rgba(79,138,255,.4); border-radius:3px 3px 0 0; height:" + b + "%; transition:height .5s")"></div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Mini -->
+        <div class="col-lg-8">
+            <div class="row g-3 mb-3">
+                <div class="col-6">
+                    <div class="stat-mini">
+                        <div class="stat-mini-icon" style="background:rgba(79,138,255,.12);color:var(--clr-accent)">
+                            <i class="bi bi-journal-check"></i>
+                        </div>
+                        <div>
+                            <div class="stat-mini-num">@(Model?.TestsCompleted ?? 47)</div>
+                            <div class="stat-mini-label">тестів пройдено</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="stat-mini">
+                        <div class="stat-mini-icon" style="background:rgba(34,197,94,.12);color:var(--clr-success)">
+                            <i class="bi bi-check2-circle"></i>
+                        </div>
+                        <div>
+                            <div class="stat-mini-num">@(Model?.CorrectAnswers ?? 831)</div>
+                            <div class="stat-mini-label">правильних відповідей</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="stat-mini">
+                        <div class="stat-mini-icon" style="background:rgba(245,158,11,.12);color:var(--clr-warn)">
+                            <i class="bi bi-clock-history"></i>
+                        </div>
+                        <div>
+                            <div class="stat-mini-num">@(Model?.TotalMinutes ?? 312)</div>
+                            <div class="stat-mini-label">хвилин навчання</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="stat-mini">
+                        <div class="stat-mini-icon" style="background:rgba(248,113,113,.12);color:#f87171">
+                            <i class="bi bi-x-circle"></i>
+                        </div>
+                        <div>
+                            <div class="stat-mini-num">@(Model?.MistakesCount ?? 64)</div>
+                            <div class="stat-mini-label">помилок для роботи</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subject Progress -->
+            <div class="chart-card">
+                <h3>Прогрес по предметах</h3>
+                <p class="chart-sub">% правильних відповідей</p>
+                @{
+                    var subjects = new[] {
+                        ("📐", "Математика",   78),
+                        ("📝", "Українська",   85),
+                        ("🏛",  "Історія",      62),
+                        ("🧬", "Біологія",     71),
+                    };
+                }
+                @foreach (var (icon, name, pct) in subjects)
+                {
+                    <div class="subject-row">
+                        <span class="subj-icon">@icon</span>
+                        <span class="subj-name">@name</span>
+                        <div class="subj-bar">
+                            <div class="progress-zno">
+                                <div class="progress-zno-fill" style="width:@pct%"></div>
+                            </div>
+                        </div>
+                        <span class="subj-pct">@pct%</span>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Recent History -->
+        <div class="col-lg-8">
+            <div class="chart-card">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+                    <h3>Остання активність</h3>
+                    <a href="/Tests/History" style="color:var(--clr-accent);font-size:.83rem;text-decoration:none">
+                        Вся історія <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+                <p class="chart-sub">Нещодавно пройдені тести</p>
+
+                @{
+                    var history = new[] {
+                        ("Математика — Тригонометрія", "Іспит", 88, "great", "15 хв", "Сьогодні 14:22"),
+                        ("Українська — Орфографія",    "Навчання", 92, "great", "22 хв", "Вчора 19:05"),
+                        ("Історія — Козацтво",         "Іспит", 61, "ok",    "30 хв", "26 бер"),
+                        ("Математика — Алгебра",       "Навчання", 45, "bad",  "18 хв", "25 бер"),
+                    };
+                }
+                @foreach (var (name, mode, score, cls, time, date) in history)
+                {
+                    <a href="/Tests/Result/1" class="history-item">
+                        <div class="history-score-circle @cls">@score%</div>
+                        <div class="history-info">
+                            <div class="h-name">@name</div>
+                            <div class="h-meta">
+                                <span class="badge-zno @(mode == 'Іспит' ? 'badge-blue' : 'badge-purple')" style="padding:2px 8px;font-size:.7rem">@mode</span>
+                                &nbsp;@time &nbsp;·&nbsp; @date
+                            </div>
+                        </div>
+                        <i class="bi bi-chevron-right history-arrow"></i>
+                    </a>
+                }
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="col-lg-4">
+            <div class="chart-card h-100">
+                <h3>Швидкий старт</h3>
+                <p class="chart-sub">Продовж там де зупинився</p>
+                <div class="d-flex flex-column gap-3">
+                    <a href="/Mistakes" class="btn-zno btn-ghost-zno" style="justify-content:flex-start">
+                        <i class="bi bi-x-circle" style="color:#f87171"></i>
+                        Робота над помилками
+                        <span class="badge-zno badge-blue ms-auto">@(Model?.MistakesCount ?? 64)</span>
+                    </a>
+                    <a href="/Favorites" class="btn-zno btn-ghost-zno" style="justify-content:flex-start">
+                        <i class="bi bi-bookmark" style="color:var(--clr-warn)"></i>
+                        Обране
+                        <span class="badge-zno badge-amber ms-auto">@(Model?.FavoritesCount ?? 12)</span>
+                    </a>
+                    <a href="/Tests?mode=exam" class="btn-zno btn-ghost-zno" style="justify-content:flex-start">
+                        <i class="bi bi-clock" style="color:var(--clr-accent)"></i>
+                        Режим іспиту
+                    </a>
+                    <a href="/Tests" class="btn-zno btn-primary-zno" style="justify-content:center; margin-top:8px">
+                        <i class="bi bi-play-fill"></i> Новий тест
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>

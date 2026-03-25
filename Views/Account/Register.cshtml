@@ -1,121 +1,86 @@
-@model ZNOWay.ViewModels.RegisterViewModel
+@model RegisterViewModel
 @{
     ViewData["Title"] = "Реєстрація";
 }
 
 <style>
     .auth-wrap {
-        min-height: calc(100vh - 140px);
+        min-height: calc(100vh - var(--nav-h) - 80px);
         display: flex; align-items: center; justify-content: center;
         padding: 48px 16px;
     }
     .auth-card {
-        background: #fff;
-        border: 1px solid #e2e8f0;
-        border-radius: 16px;
+        background: var(--clr-card);
+        border: 1px solid var(--clr-border);
+        border-radius: calc(var(--radius) * 1.5);
         padding: 48px 44px;
         width: 100%; max-width: 480px;
         position: relative; overflow: hidden;
-        box-shadow: 0 8px 32px rgba(0,0,0,.08);
     }
     .auth-card::before {
         content: '';
         position: absolute; top: 0; left: 0; right: 0; height: 3px;
-        background: linear-gradient(90deg, #27ae60, #3a7bd5);
+        background: linear-gradient(90deg, var(--clr-accent2), var(--clr-accent));
     }
     .auth-logo {
-        font-weight: 900; font-size: 1.5rem;
-        background: linear-gradient(135deg, #3a7bd5, #27ae60);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        text-align: center; margin-bottom: 8px;
+        font-family: var(--font-display); font-weight: 900; font-size: 1.5rem;
+        background: linear-gradient(135deg, var(--clr-accent), var(--clr-accent2));
+         
+         text-align: center; margin-bottom: 8px;
     }
     .auth-card h2 {
-        font-weight: 700; font-size: 1.4rem;
-        text-align: center; margin-bottom: 6px; color: #1e293b;
+        font-family: var(--font-display); font-weight: 700;
+        font-size: 1.4rem; text-align: center; margin-bottom: 6px;
     }
-    .auth-sub {
-        color: #64748b; text-align: center;
-        font-size: .875rem; margin-bottom: 36px;
-    }
+    .auth-sub { color: var(--clr-muted); text-align: center; font-size: .875rem; margin-bottom: 36px; }
     .form-group { margin-bottom: 18px; }
     .form-label-zno {
         display: block; font-size: .83rem; font-weight: 600;
-        color: #64748b; margin-bottom: 8px;
+        color: var(--clr-muted); margin-bottom: 8px;
     }
     .input-wrap { position: relative; }
     .input-icon {
         position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
-        color: #94a3b8; pointer-events: none;
+        color: var(--clr-muted); pointer-events: none;
     }
-    .form-control-zno {
-        width: 100%;
-        padding: 11px 16px 11px 38px;
-        border: 1.5px solid #e2e8f0;
-        border-radius: 8px;
-        font-size: .925rem;
-        color: #1e293b;
-        background: #f8fafc;
-        outline: none;
-        transition: border-color .2s, box-shadow .2s;
-        font-family: inherit;
-    }
-    .form-control-zno:focus {
-        border-color: #3a7bd5;
-        box-shadow: 0 0 0 3px rgba(58,123,213,.12);
-        background: #fff;
-    }
+    .input-wrap .form-control-zno { padding-left: 38px; }
     .toggle-pw {
         position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-        background: none; border: none; color: #94a3b8;
-        cursor: pointer; padding: 4px; transition: color .15s;
+        background: none; border: none; color: var(--clr-muted); cursor: pointer; padding: 4px;
     }
-    .toggle-pw:hover { color: #1e293b; }
-    .form-error {
-        color: #f87171; font-size: .78rem; margin-top: 5px;
-        display: flex; align-items: center; gap: 5px;
-    }
+    .toggle-pw:hover { color: var(--clr-text); }
+    .form-error { color: #f87171; font-size: .78rem; margin-top: 5px; display: flex; align-items: center; gap: 5px; }
+
+    /* Password strength */
     .pw-strength { margin-top: 8px; }
     .pw-bars { display: flex; gap: 4px; margin-bottom: 4px; }
     .pw-bar {
         flex: 1; height: 3px; border-radius: 99px;
-        background: #e2e8f0; transition: background .3s;
+        background: var(--clr-border); transition: background .3s;
     }
     .pw-bar.weak   { background: #f87171; }
-    .pw-bar.medium { background: #f59e0b; }
-    .pw-bar.strong { background: #27ae60; }
-    .pw-label { font-size: .75rem; color: #64748b; }
+    .pw-bar.medium { background: var(--clr-warn); }
+    .pw-bar.strong { background: var(--clr-success); }
+    .pw-label { font-size: .75rem; color: var(--clr-muted); }
+
     .btn-submit {
         width: 100%; padding: 13px;
-        background: linear-gradient(135deg, #27ae60, #3a7bd5);
-        color: #fff; border: none; border-radius: 8px;
-        font-weight: 700; font-size: 1rem;
+        background: linear-gradient(135deg, var(--clr-accent2), var(--clr-accent));
+        color: #fff; border: none; border-radius: var(--radius-sm);
+        font-family: var(--font-body); font-weight: 700; font-size: 1rem;
         cursor: pointer; transition: all .2s; margin-top: 10px;
         display: flex; align-items: center; justify-content: center; gap: 9px;
-        font-family: inherit;
     }
-    .btn-submit:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 8px 24px rgba(39,174,96,.35);
-    }
+    .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(162,89,255,.35); }
     .terms-row {
         display: flex; align-items: flex-start; gap: 10px;
         margin-bottom: 20px; margin-top: 4px;
     }
-    .terms-row input {
-        accent-color: #3a7bd5; flex-shrink: 0; margin-top: 2px; cursor: pointer;
-    }
-    .terms-row span { color: #64748b; font-size: .83rem; line-height: 1.5; }
-    .terms-row a { color: #3a7bd5; text-decoration: none; }
-    .auth-footer {
-        text-align: center; color: #64748b;
-        font-size: .875rem; margin-top: 28px;
-    }
-    .auth-footer a {
-        color: #3a7bd5; text-decoration: none; font-weight: 600;
-    }
-    .auth-footer a:hover { text-decoration: underline; }
+    .terms-row input { accent-color: var(--clr-accent); flex-shrink: 0; margin-top: 2px; }
+    .terms-row span { color: var(--clr-muted); font-size: .83rem; line-height: 1.5; }
+    .terms-row a { color: var(--clr-accent); text-decoration: none; }
+    .auth-footer { text-align: center; color: var(--clr-muted); font-size: .875rem; margin-top: 28px; }
+    .auth-footer a { color: var(--clr-accent); text-decoration: none; font-weight: 600; }
 </style>
 
 <div class="auth-wrap">
@@ -134,7 +99,10 @@
                     <input asp-for="Email" class="form-control-zno" type="email"
                            placeholder="your@email.com" autocomplete="email" />
                 </div>
-                <span asp-validation-for="Email" class="form-error"></span>
+                <span asp-validation-for="Email" class="form-error">
+                    <i class="bi bi-exclamation-circle"></i>
+                    <span class="field-validation-error"></span>
+                </span>
             </div>
 
             <div class="form-group">
@@ -144,8 +112,7 @@
                     <input asp-for="Password" class="form-control-zno" type="password"
                            id="passwordInput" placeholder="Мінімум 6 символів"
                            autocomplete="new-password" oninput="checkStrength(this.value)" />
-                    <button type="button" class="toggle-pw"
-                            onclick="togglePw('passwordInput','pwIcon1')">
+                    <button type="button" class="toggle-pw" onclick="togglePw('passwordInput','pwIcon1')">
                         <i class="bi bi-eye" id="pwIcon1"></i>
                     </button>
                 </div>
@@ -158,34 +125,32 @@
                     </div>
                     <span class="pw-label" id="pwLabel"></span>
                 </div>
-                <span asp-validation-for="Password" class="form-error"></span>
+                <span asp-validation-for="Password" class="form-error">
+                    <i class="bi bi-exclamation-circle"></i>
+                    <span class="field-validation-error"></span>
+                </span>
             </div>
 
             <div class="form-group">
-                <label class="form-label-zno" asp-for="ConfirmPassword">
-                    Підтвердити пароль
-                </label>
+                <label class="form-label-zno" asp-for="ConfirmPassword">Підтвердити пароль</label>
                 <div class="input-wrap">
                     <i class="bi bi-lock-fill input-icon"></i>
                     <input asp-for="ConfirmPassword" class="form-control-zno" type="password"
                            id="confirmInput" placeholder="Повтори пароль"
                            autocomplete="new-password" />
-                    <button type="button" class="toggle-pw"
-                            onclick="togglePw('confirmInput','pwIcon2')">
+                    <button type="button" class="toggle-pw" onclick="togglePw('confirmInput','pwIcon2')">
                         <i class="bi bi-eye" id="pwIcon2"></i>
                     </button>
                 </div>
-                <span asp-validation-for="ConfirmPassword" class="form-error"></span>
+                <span asp-validation-for="ConfirmPassword" class="form-error">
+                    <i class="bi bi-exclamation-circle"></i>
+                    <span class="field-validation-error"></span>
+                </span>
             </div>
 
             <div class="terms-row">
                 <input type="checkbox" id="agreeTerms" required />
-                <span>
-                    Я погоджуюсь з
-                    <a href="#">умовами використання</a>
-                    та
-                    <a href="#">політикою конфіденційності</a>
-                </span>
+                <span>Я погоджуюсь з <a href="#">умовами використання</a> та <a href="#">політикою конфіденційності</a></span>
             </div>
 
             <button type="submit" class="btn-submit">
@@ -194,8 +159,7 @@
         </form>
 
         <div class="auth-footer">
-            Вже маєш акаунт?
-            <a asp-controller="Account" asp-action="Login">Увійти</a>
+            Вже маєш акаунт? <a href="/Account/Login">Увійти</a>
         </div>
     </div>
 </div>
@@ -205,17 +169,12 @@
     function togglePw(inputId, iconId) {
         const inp = document.getElementById(inputId);
         const ico = document.getElementById(iconId);
-        if (inp.type === 'password') {
-            inp.type = 'text';
-            ico.className = 'bi bi-eye-slash';
-        } else {
-            inp.type = 'password';
-            ico.className = 'bi bi-eye';
-        }
+        if (inp.type === 'password') { inp.type = 'text'; ico.className = 'bi bi-eye-slash'; }
+        else { inp.type = 'password'; ico.className = 'bi bi-eye'; }
     }
 
     function checkStrength(val) {
-        const bars = [1,2,3,4].map(i => document.getElementById('bar' + i));
+        const bars = [1,2,3,4].map(i => document.getElementById('bar'+i));
         const label = document.getElementById('pwLabel');
         bars.forEach(b => { b.className = 'pw-bar'; });
 
@@ -228,10 +187,10 @@
         if (/\d/.test(val) || /[^A-Za-z0-9]/.test(val)) score++;
 
         const levels = ['', 'weak', 'medium', 'medium', 'strong'];
-        const labelTexts = ['', '🔴 Слабкий', '🟡 Середній', '🟡 Середній', '🟢 Надійний'];
+        const labels = ['', '🔴 Слабкий', '🟡 Середній', '🟡 Середній', '🟢 Надійний'];
 
-        for (let i = 0; i < score; i++) bars[i].classList.add(levels[score]);
-        label.textContent = labelTexts[score];
+        for (let i = 0; i < score; i++) { bars[i].classList.add(levels[score]); }
+        label.textContent = labels[score];
     }
 </script>
 }

@@ -1,0 +1,116 @@
+@model FavoritesViewModel
+@{
+    ViewData["Title"] = "Обране";
+    ViewData["ActivePage"] = "Favorites";
+}
+
+<style>
+    .fav-wrap { padding: 36px 0 60px; }
+    .fav-card {
+        background: var(--clr-card); border: 1px solid var(--clr-border);
+        border-radius: var(--radius); padding: 22px 24px; margin-bottom: 14px;
+        display: flex; align-items: flex-start; gap: 16px; transition: all .2s;
+    }
+    .fav-card:hover { border-color: rgba(245,158,11,.4); }
+    .fav-num {
+        width: 36px; height: 36px; border-radius: var(--radius-sm); flex-shrink: 0;
+        background: rgba(245,158,11,.12); border: 1px solid rgba(245,158,11,.3);
+        display: flex; align-items: center; justify-content: center;
+        font-family: var(--font-display); font-weight: 700; font-size: .85rem;
+        color: var(--clr-warn);
+    }
+    .fav-body { flex: 1; }
+    .fav-q { font-weight: 600; font-size: .95rem; line-height: 1.55; margin-bottom: 8px; }
+    .fav-meta { display: flex; align-items: center; gap: 10px; }
+    .fav-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .btn-icon {
+        width: 36px; height: 36px; border-radius: var(--radius-sm);
+        display: flex; align-items: center; justify-content: center;
+        background: var(--clr-surface); border: 1px solid var(--clr-border);
+        color: var(--clr-muted); cursor: pointer; font-size: 1rem;
+        transition: all .15s;
+    }
+    .btn-icon:hover { border-color: var(--clr-accent); color: var(--clr-accent); }
+    .btn-icon.remove:hover { border-color: #f87171; color: #f87171; }
+</style>
+
+<div class="fav-wrap">
+<div class="container">
+
+    <div class="page-header">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
+            <div>
+                <h1><i class="bi bi-bookmark-fill me-2" style="color:var(--clr-warn)"></i>Обране</h1>
+                <p style="color:var(--clr-muted);margin-top:6px">Збережені питання для повторення</p>
+            </div>
+            <a href="/Tests/Practice?mode=favorites" class="btn-zno btn-primary-zno">
+                <i class="bi bi-play-fill"></i> Практикувати
+            </a>
+        </div>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+        <div style="color:var(--clr-muted);font-size:.875rem">
+            Збережено: <strong style="color:var(--clr-text)">12 питань</strong>
+        </div>
+        <button onclick="clearAll()" style="background:none;border:none;color:var(--clr-muted);font-size:.83rem;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:var(--font-body)">
+            <i class="bi bi-trash3"></i> Очистити всі
+        </button>
+    </div>
+
+    @{
+        var favs = new[] {
+            ("📐", "Математика",  "badge-blue",   "Яке значення sin(30°)?",                    "Навчання · Тригонометрія"),
+            ("🏛",  "Історія",    "badge-amber",  "Коли відбулась Переяславська рада?",         "Іспит 2023 · Козацтво"),
+            ("📝", "Українська", "badge-green",  "Яке слово пишеться з подвоєнням?",            "Навчання · Орфографія"),
+            ("🧬", "Біологія",   "badge-purple", "Що таке мейоз?",                              "Навчання · Клітина"),
+            ("📐", "Математика", "badge-blue",   "Формула площі трикутника через синус?",       "Навчання · Геометрія"),
+            ("📝", "Українська", "badge-green",  "Яка відмінкова форма «мати» в родовому відмінку?", "Іспит 2024 · Морфологія"),
+        };
+    }
+
+    @for (int i = 0; i < favs.Length; i++)
+    {
+        var (icon, subj, badge, q, meta) = favs[i];
+        <div class="fav-card" id="fav@(i)">
+            <div class="fav-num">@(i+1)</div>
+            <div class="fav-body">
+                <div class="fav-q">@q</div>
+                <div class="fav-meta">
+                    <span class="badge-zno @badge">@icon @subj</span>
+                    <span style="color:var(--clr-muted);font-size:.78rem">@meta</span>
+                </div>
+            </div>
+            <div class="fav-actions">
+                <button class="btn-icon" title="Відкрити питання" onclick="openQ(@i)">
+                    <i class="bi bi-eye"></i>
+                </button>
+                <button class="btn-icon remove" title="Видалити з обраного" onclick="removeFav(@i)">
+                    <i class="bi bi-bookmark-x"></i>
+                </button>
+            </div>
+        </div>
+    }
+
+</div>
+</div>
+
+@section Scripts {
+<script>
+function removeFav(i) {
+    const card = document.getElementById('fav'+i);
+    card.style.transition = 'all .3s';
+    card.style.opacity = '0'; card.style.transform = 'translateX(20px)';
+    setTimeout(() => card.remove(), 300);
+    showToast('Видалено з обраного', 'info');
+}
+function clearAll() {
+    if (confirm('Видалити всі збережені питання?')) {
+        document.querySelectorAll('.fav-card').forEach((c,i) => {
+            setTimeout(() => { c.style.transition='all .3s'; c.style.opacity='0'; setTimeout(()=>c.remove(),300); }, i*60);
+        });
+    }
+}
+function openQ(i) { showToast('Питання буде відкрито в режимі повторення', 'info'); }
+</script>
+}

@@ -1,0 +1,372 @@
+@model AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Адміністративна панель";
+    ViewData["ActivePage"] = "Admin";
+}
+
+<style>
+    .admin-wrap { padding: 36px 0 60px; }
+    .admin-grid { display: grid; grid-template-columns: 240px 1fr; gap: 28px; }
+
+    /* ─── SIDEBAR NAV ─── */
+    .admin-nav {
+        background: var(--clr-card); border: 1px solid var(--clr-border);
+        border-radius: var(--radius); padding: 16px; position: sticky; top: 84px;
+        height: fit-content;
+    }
+    .admin-nav h4 {
+        font-family: var(--font-display); font-size: .75rem; font-weight: 700;
+        letter-spacing: .1em; text-transform: uppercase; color: var(--clr-muted);
+        padding: 8px 12px 6px; margin-bottom: 4px;
+    }
+    .admin-nav-link {
+        display: flex; align-items: center; gap: 10px;
+        padding: 9px 12px; border-radius: var(--radius-sm);
+        color: var(--clr-muted); text-decoration: none; font-size: .875rem;
+        font-weight: 500; transition: all .15s; margin-bottom: 2px;
+    }
+    .admin-nav-link:hover { background: var(--clr-hover); color: var(--clr-text); }
+    .admin-nav-link.active { background: rgba(79,138,255,.12); color: var(--clr-accent); }
+    .admin-nav-link .count {
+        margin-left: auto; font-size: .72rem; background: var(--clr-surface);
+        padding: 1px 7px; border-radius: 99px; color: var(--clr-muted);
+    }
+    .admin-divider { border: none; border-top: 1px solid var(--clr-border); margin: 8px 4px; }
+
+    /* ─── CONTENT ─── */
+    .admin-content {}
+    .admin-section-title {
+        font-family: var(--font-display); font-size: 1.4rem; font-weight: 700;
+        margin-bottom: 4px;
+    }
+    .admin-section-sub { color: var(--clr-muted); font-size: .875rem; margin-bottom: 28px; }
+
+    /* ─── OVERVIEW CARDS ─── */
+    .overview-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+    .ov-card {
+        background: var(--clr-card); border: 1px solid var(--clr-border);
+        border-radius: var(--radius); padding: 22px;
+    }
+    .ov-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .ov-icon {
+        width: 42px; height: 42px; border-radius: var(--radius-sm);
+        display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+    }
+    .ov-trend { font-size: .75rem; display: flex; align-items: center; gap: 4px; }
+    .ov-trend.up { color: var(--clr-success); }
+    .ov-trend.down { color: #f87171; }
+    .ov-val { font-family: var(--font-display); font-size: 1.8rem; font-weight: 900; }
+    .ov-label { color: var(--clr-muted); font-size: .8rem; margin-top: 3px; }
+
+    /* ─── TABLE ─── */
+    .admin-table-wrap {
+        background: var(--clr-card); border: 1px solid var(--clr-border);
+        border-radius: var(--radius); overflow: hidden; margin-bottom: 24px;
+    }
+    .admin-table-header {
+        padding: 18px 24px; border-bottom: 1px solid var(--clr-border);
+        display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+    }
+    .admin-table-header h3 { font-family: var(--font-display); font-size: 1rem; font-weight: 700; }
+    .admin-table { width: 100%; border-collapse: collapse; }
+    .admin-table th {
+        padding: 12px 24px; text-align: left;
+        font-size: .75rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+        color: var(--clr-muted); border-bottom: 1px solid var(--clr-border);
+        background: var(--clr-surface);
+    }
+    .admin-table td {
+        padding: 14px 24px; border-bottom: 1px solid var(--clr-border);
+        font-size: .875rem;
+    }
+    .admin-table tr:last-child td { border-bottom: none; }
+    .admin-table tr:hover td { background: var(--clr-hover); }
+    .td-actions { display: flex; gap: 8px; }
+    .action-btn {
+        padding: 5px 12px; border-radius: var(--radius-sm); font-size: .75rem; font-weight: 600;
+        cursor: pointer; border: 1px solid; transition: all .15s; font-family: var(--font-body);
+        display: flex; align-items: center; gap: 5px;
+    }
+    .action-btn.edit  { background: rgba(79,138,255,.1); border-color: rgba(79,138,255,.3); color: var(--clr-accent); }
+    .action-btn.edit:hover { background: var(--clr-accent); color: #fff; border-color: var(--clr-accent); }
+    .action-btn.del   { background: rgba(248,113,113,.1); border-color: rgba(248,113,113,.3); color: #f87171; }
+    .action-btn.del:hover { background: #f87171; color: #fff; border-color: #f87171; }
+    .action-btn.view  { background: rgba(162,89,255,.1); border-color: rgba(162,89,255,.3); color: var(--clr-accent2); }
+
+    /* ─── MODAL FORM ─── */
+    .form-modal-overlay {
+        position: fixed; inset: 0; z-index: 2000;
+        background: rgba(0,0,0,.7); backdrop-filter: blur(6px);
+        display: flex; align-items: center; justify-content: center;
+        opacity: 0; pointer-events: none; transition: opacity .2s;
+    }
+    .form-modal-overlay.show { opacity: 1; pointer-events: all; }
+    .form-modal {
+        background: var(--clr-card); border: 1px solid var(--clr-border);
+        border-radius: var(--radius); padding: 36px; max-width: 520px; width: 90%;
+        transform: scale(.95); transition: transform .2s; max-height: 90vh; overflow-y: auto;
+    }
+    .form-modal-overlay.show .form-modal { transform: scale(1); }
+    .form-modal h3 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; margin-bottom: 24px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group-adm { margin-bottom: 18px; }
+    .form-label-adm { display: block; font-size: .83rem; font-weight: 600; color: var(--clr-muted); margin-bottom: 7px; }
+    .form-modal-footer { display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px; }
+
+    @@media (max-width: 900px) {
+        .admin-grid { grid-template-columns: 1fr; }
+        .admin-nav { position: static; }
+        .overview-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @@media (max-width: 600px) {
+        .overview-grid { grid-template-columns: 1fr 1fr; }
+        .form-row { grid-template-columns: 1fr; }
+    }
+</style>
+
+<div class="admin-wrap">
+<div class="container">
+<div class="admin-grid">
+
+    <!-- Admin Sidebar Nav -->
+    <aside class="admin-nav">
+        <h4>Управління</h4>
+        <a href="/Admin" class="admin-nav-link active">
+            <i class="bi bi-speedometer2"></i> Огляд
+        </a>
+        <a href="/Admin/Users" class="admin-nav-link">
+            <i class="bi bi-people"></i> Користувачі
+            <span class="count">247</span>
+        </a>
+        <hr class="admin-divider">
+        <h4>Контент</h4>
+        <a href="/Admin/Subjects" class="admin-nav-link">
+            <i class="bi bi-bookmarks"></i> Предмети
+            <span class="count">6</span>
+        </a>
+        <a href="/Admin/Topics" class="admin-nav-link">
+            <i class="bi bi-tags"></i> Теми
+            <span class="count">48</span>
+        </a>
+        <a href="/Admin/Tests" class="admin-nav-link">
+            <i class="bi bi-journal-text"></i> Тести
+            <span class="count">124</span>
+        </a>
+        <a href="/Admin/Questions" class="admin-nav-link">
+            <i class="bi bi-question-circle"></i> Питання
+            <span class="count">10 204</span>
+        </a>
+        <a href="/Admin/Materials" class="admin-nav-link">
+            <i class="bi bi-file-text"></i> Матеріали
+        </a>
+        <hr class="admin-divider">
+        <h4>Імпорт</h4>
+        <a href="/Admin/Import" class="admin-nav-link">
+            <i class="bi bi-cloud-upload"></i> JSON / Excel
+        </a>
+        <a href="/Admin/Analytics" class="admin-nav-link">
+            <i class="bi bi-bar-chart"></i> Аналітика
+        </a>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="admin-content">
+        <div class="admin-section-title">Огляд платформи</div>
+        <div class="admin-section-sub">Загальна статистика ZNOway</div>
+
+        <!-- Overview Cards -->
+        <div class="overview-grid">
+            @{
+                var ovCards = new[] {
+                    ("bi-people",          "rgba(79,138,255,.12)",  "var(--clr-accent)",   "247",   "Користувачів",     "+12", true),
+                    ("bi-journal-text",    "rgba(34,197,94,.12)",   "var(--clr-success)",  "124",   "Тестів",           "+3",  true),
+                    ("bi-question-circle", "rgba(162,89,255,.12)",  "var(--clr-accent2)",  "10 204","Питань",           "+86", true),
+                    ("bi-check2-all",      "rgba(245,158,11,.12)",  "var(--clr-warn)",     "3 847", "Тестів пройдено",  "+234",true),
+                };
+            }
+            @foreach (var (icon, bg, color, val, label, trend, isUp) in ovCards)
+            {
+                <div class="ov-card">
+                    <div class="ov-top">
+                        <div class="ov-icon" style="background:@bg;color:@color">
+                            <i class="bi @icon"></i>
+                        </div>
+                        <div class="ov-trend @(isUp ? "up" : "down")">
+                            <i class="bi bi-arrow-up-short"></i> @trend
+                        </div>
+                    </div>
+                    <div class="ov-val">@val</div>
+                    <div class="ov-label">@label</div>
+                </div>
+            }
+        </div>
+
+        <!-- Users Table -->
+        <div class="admin-table-wrap">
+            <div class="admin-table-header">
+                <h3><i class="bi bi-people me-2"></i>Останні користувачі</h3>
+                <div style="display:flex;gap:10px">
+                    <div style="position:relative">
+                        <i class="bi bi-search" style="position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--clr-muted);font-size:.85rem"></i>
+                        <input type="text" class="form-control-zno" placeholder="Пошук..."
+                               style="padding-left:32px;font-size:.85rem;width:200px" />
+                    </div>
+                    <button class="btn-zno btn-primary-zno" onclick="showAddUser()" style="padding:8px 16px;font-size:.83rem">
+                        <i class="bi bi-plus-lg"></i> Додати
+                    </button>
+                </div>
+            </div>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Email</th>
+                        <th>Роль</th>
+                        <th>Тестів</th>
+                        <th>Останній вхід</th>
+                        <th>Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var users = new[] {
+                            (1, "student1@gmail.com", "Student", 12, "Сьогодні 14:22"),
+                            (2, "anna.k@ukr.net",    "Student", 34, "Вчора 20:11"),
+                            (3, "mykola@gmail.com",  "Student",  7, "25 бер"),
+                            (4, "admin@zno.ua",      "Admin",    0, "Сьогодні 09:00"),
+                            (5, "test.user@i.ua",    "Student", 21, "24 бер"),
+                        };
+                    }
+                    @foreach (var (id, email, role, tests, lastLogin) in users)
+                    {
+                        <tr>
+                            <td style="color:var(--clr-muted)">#@id</td>
+                            <td>@email</td>
+                            <td>
+                                <span class="badge-zno @(role == "Admin" ? "badge-blue" : "badge-purple")">@role</span>
+                            </td>
+                            <td>@tests</td>
+                            <td style="color:var(--clr-muted)">@lastLogin</td>
+                            <td>
+                                <div class="td-actions">
+                                    <button class="action-btn edit" onclick="editUser(@id)">
+                                        <i class="bi bi-pencil"></i> Редагувати
+                                    </button>
+                                    <button class="action-btn del" onclick="deleteUser(@id)">
+                                        <i class="bi bi-trash3"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Tests Table -->
+        <div class="admin-table-wrap">
+            <div class="admin-table-header">
+                <h3><i class="bi bi-journal-text me-2"></i>Тести</h3>
+                <button class="btn-zno btn-primary-zno" style="padding:8px 16px;font-size:.83rem">
+                    <i class="bi bi-plus-lg"></i> Новий тест
+                </button>
+            </div>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Назва</th>
+                        <th>Предмет</th>
+                        <th>Питань</th>
+                        <th>Тип</th>
+                        <th>Рік</th>
+                        <th>Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var adminTests = new[] {
+                            ("Тригонометрія — НМТ 2024", "📐 Математика", 40, "Exam", "2024"),
+                            ("Орфографія та пунктуація", "📝 Українська", 35, "Training", "2023"),
+                            ("Козацтво XVII–XVIII ст.",  "🏛 Історія",    45, "Exam", "2024"),
+                            ("Клітина та її будова",     "🧬 Біологія",   30, "Training", "2023"),
+                        };
+                    }
+                    @foreach (var (name, subj, qCnt, testType, year) in adminTests)
+                    {
+                        <tr>
+                            <td style="font-weight:600">@name</td>
+                            <td>@subj</td>
+                            <td>@qCnt</td>
+                            <td>
+                                <span class="badge-zno @(testType == "Exam" ? "badge-blue" : "badge-purple")">
+                                    @(testType == "Exam" ? "Іспит" : "Навчання")
+                                </span>
+                            </td>
+                            <td>@year</td>
+                            <td>
+                                <div class="td-actions">
+                                    <button class="action-btn view"><i class="bi bi-eye"></i></button>
+                                    <button class="action-btn edit"><i class="bi bi-pencil"></i></button>
+                                    <button class="action-btn del"><i class="bi bi-trash3"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+</div>
+</div>
+
+<!-- Add/Edit User Modal -->
+<div class="form-modal-overlay" id="userModal">
+    <div class="form-modal">
+        <h3><i class="bi bi-person-plus me-2"></i>Додати користувача</h3>
+        <div class="form-group-adm">
+            <label class="form-label-adm">Email</label>
+            <input type="email" class="form-control-zno" placeholder="user@example.com" />
+        </div>
+        <div class="form-row">
+            <div class="form-group-adm">
+                <label class="form-label-adm">Пароль</label>
+                <input type="password" class="form-control-zno" placeholder="••••••••" />
+            </div>
+            <div class="form-group-adm">
+                <label class="form-label-adm">Роль</label>
+                <select class="form-control-zno">
+                    <option>Student</option>
+                    <option>Admin</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-modal-footer">
+            <button onclick="closeModal('userModal')"
+                    style="padding:10px 22px;background:var(--clr-surface);border:1px solid var(--clr-border);border-radius:var(--radius-sm);color:var(--clr-muted);cursor:pointer;font-family:var(--font-body)">
+                Скасувати
+            </button>
+            <button class="btn-zno btn-primary-zno" onclick="saveUser()">
+                <i class="bi bi-check2"></i> Зберегти
+            </button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+function showAddUser() { document.getElementById('userModal').classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+function saveUser() { closeModal('userModal'); showToast('Користувача збережено!', 'success'); }
+function editUser(id) { showAddUser(); }
+function deleteUser(id) {
+    if (confirm('Видалити користувача #' + id + '?')) {
+        showToast('Користувача видалено', 'info');
+    }
+}
+document.getElementById('userModal').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeModal('userModal');
+});
+</script>
+}

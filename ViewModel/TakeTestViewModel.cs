@@ -1,11 +1,18 @@
-﻿namespace ZNOWay.ViewModel
+using System.Collections.Generic;
+
+namespace ZNOWay.ViewModels
 {
     public class TakeTestViewModel
     {
         public int TestId { get; set; }
         public string TestName { get; set; } = string.Empty;
-        public string SubjectName { get; set; } = string.Empty;
-        public int TotalQuestions { get; set; }
-        public int? TimeLimit { get; set; }
+
+        // "Exam" або "Training"
+        public string TestType { get; set; } = "Training";
+
+        // Ліміт часу в хвилинах (тільки для Exam)
+        public int TimeLimitMinutes { get; set; } = 30;
+
+        public List<QuestionViewModel> Questions { get; set; } = new();
     }
 }
