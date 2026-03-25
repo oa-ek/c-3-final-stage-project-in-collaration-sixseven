@@ -1,0 +1,118 @@
+@model IEnumerable<ZNOWay.Models.Subject>
+@{
+    ViewData["Title"] = "Предмети";
+}
+
+<style>
+    .subjects-wrap { padding: 36px 0 60px; }
+    .subjects-table-wrap {
+        background: var(--clr-card);
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius);
+        overflow: hidden;
+    }
+    .subjects-table { width: 100%; border-collapse: collapse; }
+    .subjects-table thead tr {
+        background: var(--clr-surface);
+        border-bottom: 1px solid var(--clr-border);
+    }
+    .subjects-table thead th {
+        padding: 14px 20px;
+        font-size: .75rem; font-weight: 700;
+        color: var(--clr-muted); text-transform: uppercase; letter-spacing: .07em;
+        text-align: left;
+    }
+    .subjects-table tbody tr {
+        border-bottom: 1px solid var(--clr-border);
+        transition: background .15s;
+    }
+    .subjects-table tbody tr:last-child { border-bottom: none; }
+    .subjects-table tbody tr:hover { background: rgba(255,255,255,.03); }
+    .subjects-table tbody td { padding: 14px 20px; font-size: .9rem; vertical-align: middle; }
+
+    .subject-icon {
+        width: 36px; height: 36px; border-radius: var(--radius-sm);
+        background: rgba(79,138,255,.12); border: 1px solid rgba(79,138,255,.2);
+        display: inline-flex; align-items: center; justify-content: center;
+        color: var(--clr-accent); font-size: 1rem; margin-right: 10px; flex-shrink: 0;
+    }
+    .subject-cell { display: flex; align-items: center; }
+    .subject-name { font-weight: 600; }
+
+    .action-cell { display: flex; gap: 6px; }
+    .btn-tbl {
+        width: 32px; height: 32px; border-radius: var(--radius-sm);
+        display: inline-flex; align-items: center; justify-content: center;
+        border: 1px solid var(--clr-border); background: var(--clr-surface);
+        color: var(--clr-muted); text-decoration: none; font-size: .82rem;
+        transition: all .15s;
+    }
+    .btn-tbl:hover { color: var(--clr-accent); border-color: var(--clr-accent); }
+    .btn-tbl.danger:hover { color: #f87171; border-color: #f87171; }
+
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--clr-muted); }
+    .empty-state i { font-size: 2.5rem; display: block; margin-bottom: 12px; opacity: .4; }
+</style>
+
+<div class="subjects-wrap">
+<div class="container">
+
+    <div class="page-header d-flex align-items-start justify-content-between flex-wrap gap-3 mb-4">
+        <div>
+            <h1><i class="bi bi-book me-2" style="color:var(--clr-accent)"></i>Предмети</h1>
+            <p style="color:var(--clr-muted);margin-top:6px">Управління предметами платформи</p>
+        </div>
+        <a asp-action="Create" class="btn-zno d-flex align-items-center gap-2">
+            <i class="bi bi-plus-lg"></i> Додати предмет
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <i class="bi bi-book"></i>
+            <p>Предметів ще немає</p>
+        </div>
+    }
+    else
+    {
+        <div class="subjects-table-wrap">
+            <table class="subjects-table">
+                <thead>
+                    <tr>
+                        <th>Назва</th>
+                        <th style="width:120px">Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="subject-cell">
+                                    <div class="subject-icon"><i class="bi bi-mortarboard"></i></div>
+                                    <span class="subject-name">@item.Name</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="action-cell">
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn-tbl" title="Деталі">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn-tbl" title="Редагувати">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn-tbl danger" title="Видалити">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+</div>
+</div>

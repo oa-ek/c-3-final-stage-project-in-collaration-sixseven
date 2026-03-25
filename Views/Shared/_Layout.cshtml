@@ -3,6 +3,549 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<<<<<<< HEAD
+    <title>@ViewData["Title"] — ZNOway</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet" />
+    <!-- Bootstrap 5 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --clr-bg: #0d0f14;
+            --clr-surface: #13161e;
+            --clr-card: #181c27;
+            --clr-border: #252a38;
+            --clr-accent: #4f8aff;
+            --clr-accent2: #a259ff;
+            --clr-success: #22c55e;
+            --clr-warn: #f59e0b;
+            --clr-text: #e8eaf0;
+            --clr-muted: #6b7280;
+            --clr-hover: #1e2334;
+            --font-display: 'Unbounded', sans-serif;
+            --font-body: 'Manrope', sans-serif;
+            --radius: 14px;
+            --radius-sm: 8px;
+            --nav-h: 68px;
+            --transition: .2s ease;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: var(--clr-bg);
+            color: var(--clr-text);
+            font-family: var(--font-body);
+            font-size: 15px;
+            line-height: 1.65;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ─── SCROLLBAR ─── */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--clr-bg); }
+        ::-webkit-scrollbar-thumb { background: var(--clr-border); border-radius: 99px; }
+
+        /* ─── NAVBAR ─── */
+        .zno-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            height: var(--nav-h);
+            background: rgba(13, 15, 20, .85);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid var(--clr-border);
+        }
+
+        .zno-nav .container-fluid {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            padding: 0 28px;
+        }
+
+        .nav-logo {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 900;
+            letter-spacing: -.02em;
+            text-decoration: none;
+            background: linear-gradient(135deg, var(--clr-accent), var(--clr-accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            flex-shrink: 0;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            list-style: none;
+            flex: 1;
+        }
+
+        .nav-links a {
+            color: var(--clr-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: .875rem;
+            padding: 6px 14px;
+            border-radius: var(--radius-sm);
+            transition: color var(--transition), background var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--clr-text);
+            background: var(--clr-hover);
+        }
+
+        .nav-links a.active {
+            color: var(--clr-accent);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: auto;
+        }
+
+        /* ─── BUTTONS ─── */
+        .btn-zno {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 20px;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: .875rem;
+            cursor: pointer;
+            border: none;
+            transition: all var(--transition);
+            text-decoration: none;
+        }
+
+        .btn-primary-zno {
+            background: var(--clr-accent);
+            color: #fff;
+        }
+        .btn-primary-zno:hover {
+            background: #3a77f5;
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(79,138,255,.35);
+        }
+
+        .btn-ghost-zno {
+            background: transparent;
+            color: var(--clr-muted);
+            border: 1px solid var(--clr-border);
+        }
+        .btn-ghost-zno:hover {
+            background: var(--clr-hover);
+            color: var(--clr-text);
+            border-color: var(--clr-muted);
+        }
+
+        .btn-success-zno {
+            background: var(--clr-success);
+            color: #fff;
+        }
+        .btn-success-zno:hover {
+            background: #16a34a;
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        /* ─── USER AVATAR ─── */
+        .user-avatar {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--clr-accent), var(--clr-accent2));
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: .8rem; color: #fff;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: calc(100% + 12px);
+            right: 0;
+            background: var(--clr-card);
+            border: 1px solid var(--clr-border);
+            border-radius: var(--radius);
+            min-width: 200px;
+            padding: 8px;
+            display: none;
+            box-shadow: 0 20px 60px rgba(0,0,0,.5);
+        }
+
+        .user-avatar:hover .user-dropdown,
+        .user-avatar:focus-within .user-dropdown { display: block; }
+
+        .user-dropdown a {
+            display: flex; align-items: center; gap: 10px;
+            padding: 9px 12px;
+            color: var(--clr-muted);
+            text-decoration: none;
+            font-size: .875rem;
+            border-radius: var(--radius-sm);
+            transition: all var(--transition);
+        }
+        .user-dropdown a:hover { background: var(--clr-hover); color: var(--clr-text); }
+        .user-dropdown hr { border-color: var(--clr-border); margin: 6px 0; }
+
+        /* ─── HAMBURGER ─── */
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--clr-text);
+            font-size: 1.4rem;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            background: var(--clr-bg);
+            padding: 80px 28px 28px;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .mobile-menu.open { display: flex; }
+        .mobile-menu a {
+            color: var(--clr-text);
+            text-decoration: none;
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--clr-border);
+            display: flex; align-items: center; gap: 12px;
+        }
+        .mobile-close {
+            position: absolute; top: 20px; right: 24px;
+            background: none; border: none;
+            color: var(--clr-muted); font-size: 1.6rem; cursor: pointer;
+        }
+
+        /* ─── MAIN ─── */
+        main { flex: 1; }
+
+        /* ─── CARDS ─── */
+        .card-zno {
+            background: var(--clr-card);
+            border: 1px solid var(--clr-border);
+            border-radius: var(--radius);
+            padding: 24px;
+            transition: border-color var(--transition), transform var(--transition);
+        }
+        .card-zno:hover {
+            border-color: rgba(79,138,255,.35);
+            transform: translateY(-2px);
+        }
+
+        /* ─── BADGE ─── */
+        .badge-zno {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 3px 10px;
+            border-radius: 99px;
+            font-size: .75rem;
+            font-weight: 600;
+        }
+        .badge-blue  { background: rgba(79,138,255,.15); color: var(--clr-accent); }
+        .badge-purple{ background: rgba(162,89,255,.15); color: var(--clr-accent2); }
+        .badge-green { background: rgba(34,197,94,.15);  color: var(--clr-success); }
+        .badge-amber { background: rgba(245,158,11,.15); color: var(--clr-warn); }
+
+        /* ─── ALERTS ─── */
+        .alert-zno {
+            border-radius: var(--radius-sm);
+            padding: 12px 18px;
+            font-size: .875rem;
+            border: 1px solid transparent;
+        }
+        .alert-success-zno { background: rgba(34,197,94,.1); border-color: rgba(34,197,94,.3); color: var(--clr-success); }
+        .alert-error-zno   { background: rgba(239,68,68,.1);  border-color: rgba(239,68,68,.3);  color: #f87171; }
+        .alert-info-zno    { background: rgba(79,138,255,.1); border-color: rgba(79,138,255,.3); color: var(--clr-accent); }
+
+        /* ─── FORM CONTROLS ─── */
+        .form-control-zno {
+            background: var(--clr-surface);
+            border: 1px solid var(--clr-border);
+            border-radius: var(--radius-sm);
+            color: var(--clr-text);
+            padding: 10px 14px;
+            font-family: var(--font-body);
+            font-size: .9rem;
+            width: 100%;
+            transition: border-color var(--transition), box-shadow var(--transition);
+            outline: none;
+        }
+        .form-control-zno:focus {
+            border-color: var(--clr-accent);
+            box-shadow: 0 0 0 3px rgba(79,138,255,.2);
+        }
+        .form-control-zno::placeholder { color: var(--clr-muted); }
+
+        /* ─── PROGRESS BAR ─── */
+        .progress-zno {
+            height: 6px;
+            background: var(--clr-border);
+            border-radius: 99px;
+            overflow: hidden;
+        }
+        .progress-zno-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--clr-accent), var(--clr-accent2));
+            border-radius: 99px;
+            transition: width .4s ease;
+        }
+
+        /* ─── FOOTER ─── */
+        .zno-footer {
+            border-top: 1px solid var(--clr-border);
+            padding: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .footer-logo {
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: .9rem;
+            background: linear-gradient(135deg, var(--clr-accent), var(--clr-accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .zno-footer p { color: var(--clr-muted); font-size: .8rem; }
+        .footer-links { display: flex; gap: 20px; }
+        .footer-links a { color: var(--clr-muted); font-size: .8rem; text-decoration: none; }
+        .footer-links a:hover { color: var(--clr-text); }
+
+        /* ─── TOAST ─── */
+        .toast-container-zno {
+            position: fixed;
+            bottom: 24px; right: 24px;
+            z-index: 9999;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .toast-zno {
+            background: var(--clr-card);
+            border: 1px solid var(--clr-border);
+            border-radius: var(--radius);
+            padding: 14px 18px;
+            min-width: 280px;
+            display: flex; align-items: center; gap: 12px;
+            box-shadow: 0 12px 40px rgba(0,0,0,.4);
+            animation: slideUp .3s ease;
+        }
+        @@keyframes slideUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ─── PAGE HEADER ─── */
+        .page-header {
+            padding: 40px 0 32px;
+            border-bottom: 1px solid var(--clr-border);
+            margin-bottom: 32px;
+        }
+        .page-header h1 {
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @@media (max-width: 768px) {
+            .nav-links, .nav-actions .btn-zno:not(.user-avatar) { display: none; }
+            .hamburger { display: block; }
+            .zno-footer { flex-direction: column; text-align: center; }
+            .footer-links { justify-content: center; }
+        }
+    </style>
+
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav class="zno-nav">
+    <div class="container-fluid">
+        <a href="/" class="nav-logo">ZNO<span style="opacity:.5">way</span></a>
+
+        <ul class="nav-links">
+            <li>
+                <a href="/Tests" class="@(ViewData["ActivePage"]?.ToString() == "Tests" ? "active" : "")">
+                    <i class="bi bi-journal-text"></i> Тести
+                </a>
+            </li>
+            <li>
+                <a href="/Dashboard" class="@(ViewData["ActivePage"]?.ToString() == "Dashboard" ? "active" : "")">
+                    <i class="bi bi-bar-chart-line"></i> Прогрес
+                </a>
+            </li>
+            <li>
+                <a href="/Favorites" class="@(ViewData["ActivePage"]?.ToString() == "Favorites" ? "active" : "")">
+                    <i class="bi bi-bookmark"></i> Обране
+                </a>
+            </li>
+            <li>
+                <a href="/Mistakes" class="@(ViewData["ActivePage"]?.ToString() == "Mistakes" ? "active" : "")">
+                    <i class="bi bi-x-circle"></i> Помилки
+                </a>
+            </li>
+            @if (User.IsInRole("Admin"))
+            {
+                <li>
+                    <a href="/Admin" class="@(ViewData["ActivePage"]?.ToString() == "Admin" ? "active" : "")">
+                        <i class="bi bi-shield-check"></i> Адмін
+                    </a>
+                </li>
+            }
+        </ul>
+
+        <div class="nav-actions">
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <div class="user-avatar" tabindex="0">
+                    @User.Identity.Name?.Substring(0, 1).ToUpper()
+                    <div class="user-dropdown">
+                        <a href="/Dashboard"><i class="bi bi-person"></i> Мій кабінет</a>
+                        <a href="/Account/Settings"><i class="bi bi-gear"></i> Налаштування</a>
+                        <hr />
+                        <a href="/Account/Logout" style="color:#f87171"><i class="bi bi-box-arrow-right"></i> Вийти</a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <a href="/Account/Login" class="btn-zno btn-ghost-zno">Увійти</a>
+                <a href="/Account/Register" class="btn-zno btn-primary-zno">
+                    <i class="bi bi-person-plus"></i> Реєстрація
+                </a>
+            }
+            <button class="hamburger" id="hamburgerBtn"><i class="bi bi-list"></i></button>
+        </div>
+    </div>
+</nav>
+
+<!-- ═══ MOBILE MENU ═══ -->
+<div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-close" id="mobileClose"><i class="bi bi-x"></i></button>
+    <a href="/Tests"><i class="bi bi-journal-text"></i> Тести</a>
+    <a href="/Dashboard"><i class="bi bi-bar-chart-line"></i> Прогрес</a>
+    <a href="/Favorites"><i class="bi bi-bookmark"></i> Обране</a>
+    <a href="/Mistakes"><i class="bi bi-x-circle"></i> Помилки</a>
+    @if (User.IsInRole("Admin"))
+    {
+        <a href="/Admin"><i class="bi bi-shield-check"></i> Адмін</a>
+    }
+    <div style="margin-top:auto; display:flex; flex-direction:column; gap:10px;">
+        <a href="/Account/Login" class="btn-zno btn-ghost-zno" style="justify-content:center">Увійти</a>
+        <a href="/Account/Register" class="btn-zno btn-primary-zno" style="justify-content:center">Реєстрація</a>
+    </div>
+</div>
+
+<!-- ═══ ALERTS (TempData) ═══ -->
+@if (TempData["Success"] != null)
+{
+    <div class="container mt-3">
+        <div class="alert-zno alert-success-zno">
+            <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+        </div>
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="container mt-3">
+        <div class="alert-zno alert-error-zno">
+            <i class="bi bi-exclamation-circle me-2"></i>@TempData["Error"]
+        </div>
+    </div>
+}
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<main>
+    @RenderBody()
+</main>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="zno-footer">
+    <div>
+        <div class="footer-logo">ZNOway</div>
+        <p style="margin-top:4px">Платформа для підготовки до ЗНО/НМТ</p>
+    </div>
+    <nav class="footer-links">
+        <a href="/Tests">Тести</a>
+        <a href="/Dashboard">Прогрес</a>
+        <a href="/Account/Register">Реєстрація</a>
+    </nav>
+    <p>&copy; @DateTime.Now.Year ZNOway. Всі права захищені.</p>
+</footer>
+
+<!-- ═══ TOAST CONTAINER ═══ -->
+<div class="toast-container-zno" id="toastContainer"></div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Mobile menu
+    const hamburger = document.getElementById('hamburgerBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileClose = document.getElementById('mobileClose');
+
+    hamburger?.addEventListener('click', () => mobileMenu.classList.add('open'));
+    mobileClose?.addEventListener('click', () => mobileMenu.classList.remove('open'));
+
+    // Toast helper — use: showToast('Збережено!', 'success')
+    function showToast(message, type = 'info') {
+        const icons = { success: 'bi-check-circle', error: 'bi-x-circle', info: 'bi-info-circle' };
+        const colors = { success: '#22c55e', error: '#f87171', info: '#4f8aff' };
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = 'toast-zno';
+        toast.innerHTML = `
+            <i class="bi ${icons[type]}" style="color:${colors[type]};font-size:1.2rem;flex-shrink:0"></i>
+            <span style="flex:1">${message}</span>
+            <button onclick="this.parentElement.remove()" style="background:none;border:none;color:var(--clr-muted);cursor:pointer;font-size:1.1rem"><i class="bi bi-x"></i></button>
+        `;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 4000);
+    }
+
+    // Active nav highlight based on current path
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        if (link.href === window.location.href) link.classList.add('active');
+    });
+</script>
+
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+=======
     <title>@ViewData["Title"] - ZNOWay</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
 </head>
@@ -78,3 +621,4 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+>>>>>>> 090e2cd928202a10759c36d84e6664f30602fc76

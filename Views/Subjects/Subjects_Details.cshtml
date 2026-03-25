@@ -1,0 +1,81 @@
+@model ZNOWay.Models.Subject
+@{
+    ViewData["Title"] = "Деталі предмету";
+}
+
+<style>
+    .details-wrap { padding: 36px 0 60px; }
+    .details-card {
+        background: var(--clr-card); border: 1px solid var(--clr-border);
+        border-radius: calc(var(--radius) * 1.5); padding: 40px 44px;
+        max-width: 480px; position: relative; overflow: hidden;
+    }
+    .details-card::before {
+        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+        background: linear-gradient(90deg, var(--clr-accent2), var(--clr-accent));
+    }
+    .subject-hero {
+        display: flex; align-items: center; gap: 16px; margin-bottom: 28px;
+    }
+    .subject-big-icon {
+        width: 60px; height: 60px; border-radius: var(--radius);
+        background: rgba(79,138,255,.12); border: 1px solid rgba(79,138,255,.25);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.6rem; color: var(--clr-accent); flex-shrink: 0;
+    }
+    .subject-hero h2 { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; margin: 0; }
+    .subject-hero span { font-size: .8rem; color: var(--clr-muted); }
+    .info-row {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 12px 0; border-bottom: 1px solid var(--clr-border);
+    }
+    .info-row:last-of-type { border-bottom: none; }
+    .info-label { font-size: .8rem; font-weight: 600; color: var(--clr-muted); text-transform: uppercase; letter-spacing: .05em; display: flex; align-items: center; gap: 8px; }
+    .info-value { font-weight: 500; font-size: .9rem; }
+    .form-actions { display: flex; gap: 12px; margin-top: 28px; }
+    .btn-cancel {
+        padding: 11px 24px; border-radius: var(--radius-sm);
+        border: 1px solid var(--clr-border); background: var(--clr-surface);
+        color: var(--clr-muted); font-family: var(--font-body); font-weight: 600;
+        text-decoration: none; display: inline-flex; align-items: center; gap: 7px; transition: all .15s;
+    }
+    .btn-cancel:hover { color: var(--clr-text); border-color: var(--clr-accent); }
+</style>
+
+<div class="details-wrap">
+<div class="container">
+
+    <div class="page-header mb-4">
+        <h1><i class="bi bi-book me-2" style="color:var(--clr-accent)"></i>Деталі предмету</h1>
+    </div>
+
+    <div class="details-card">
+        <div class="subject-hero">
+            <div class="subject-big-icon"><i class="bi bi-mortarboard"></i></div>
+            <div>
+                <h2>@Model.Name</h2>
+                <span>ID: #@Model.Id</span>
+            </div>
+        </div>
+
+        <div class="info-row">
+            <span class="info-label"><i class="bi bi-hash"></i> ID</span>
+            <span class="info-value">@Model.Id</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label"><i class="bi bi-book"></i> Назва</span>
+            <span class="info-value">@Model.Name</span>
+        </div>
+
+        <div class="form-actions">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-zno d-flex align-items-center gap-2">
+                <i class="bi bi-pencil"></i> Редагувати
+            </a>
+            <a asp-action="Index" class="btn-cancel">
+                <i class="bi bi-arrow-left"></i> Назад
+            </a>
+        </div>
+    </div>
+
+</div>
+</div>

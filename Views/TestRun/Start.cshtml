@@ -1,3 +1,259 @@
+<<<<<<< HEAD
+@model ZNOWay.ViewModels.TestRunViewModel
+@{
+    ViewData["Title"] = "Старт тесту";
+    Layout = "_Layout";
+}
+
+@section Styles {
+<style>
+    .start-wrap {
+        min-height: calc(100vh - var(--nav-h));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 48px 20px;
+        background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(79,138,255,.07), transparent);
+    }
+
+    .start-card {
+        background: var(--clr-card);
+        border: 1px solid var(--clr-border);
+        border-radius: calc(var(--radius) * 1.3);
+        width: 100%;
+        max-width: 520px;
+        overflow: hidden;
+        animation: fadeUp .45s ease both;
+    }
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── HEADER ── */
+    .start-header {
+        padding: 36px 40px 28px;
+        border-bottom: 1px solid var(--clr-border);
+        position: relative;
+        overflow: hidden;
+    }
+    .start-header::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(79,138,255,.08), transparent);
+        pointer-events: none;
+    }
+    .start-subject {
+        font-size: .75rem;
+        font-weight: 700;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        color: var(--clr-accent);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .start-title {
+        font-family: var(--font-display);
+        font-size: 1.4rem;
+        font-weight: 800;
+        line-height: 1.25;
+        color: var(--clr-text);
+    }
+
+    /* ── META ── */
+    .start-meta {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        border-bottom: 1px solid var(--clr-border);
+    }
+    .meta-cell {
+        padding: 22px 16px;
+        text-align: center;
+        border-right: 1px solid var(--clr-border);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+    .meta-cell:last-child { border-right: none; }
+    .meta-icon {
+        width: 40px; height: 40px;
+        border-radius: var(--radius-sm);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.1rem;
+    }
+    .meta-icon.blue   { background: rgba(79,138,255,.12); color: var(--clr-accent); }
+    .meta-icon.purple { background: rgba(162,89,255,.12); color: var(--clr-accent2); }
+    .meta-icon.green  { background: rgba(34,197,94,.12);  color: var(--clr-success); }
+    .meta-icon.amber  { background: rgba(245,158,11,.12); color: var(--clr-warn); }
+    .meta-val {
+        font-family: var(--font-display);
+        font-size: 1rem;
+        font-weight: 800;
+        color: var(--clr-text);
+        line-height: 1;
+    }
+    .meta-lbl { font-size: .72rem; color: var(--clr-muted); }
+
+    /* ── TIPS ── */
+    .start-tips {
+        padding: 22px 40px;
+        border-bottom: 1px solid var(--clr-border);
+    }
+    .tips-title {
+        font-size: .72rem;
+        font-weight: 700;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        color: var(--clr-muted);
+        margin-bottom: 12px;
+    }
+    .tip-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: .83rem;
+        color: var(--clr-muted);
+        margin-bottom: 8px;
+    }
+    .tip-item:last-child { margin-bottom: 0; }
+    .tip-dot {
+        width: 6px; height: 6px;
+        border-radius: 50%;
+        background: var(--clr-accent);
+        flex-shrink: 0;
+    }
+
+    /* ── ACTION ── */
+    .start-action {
+        padding: 24px 40px;
+    }
+    .btn-start {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        width: 100%;
+        background: var(--clr-success);
+        color: #fff;
+        border: none;
+        border-radius: var(--radius-sm);
+        padding: 15px 28px;
+        font-family: var(--font-display);
+        font-weight: 800;
+        font-size: 1rem;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all .2s;
+    }
+    .btn-start:hover {
+        background: #16a34a;
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(34,197,94,.35);
+    }
+    .btn-start i { font-size: 1.2rem; }
+
+    .back-link {
+        display: block;
+        text-align: center;
+        margin-top: 14px;
+        font-size: .82rem;
+        color: var(--clr-muted);
+        text-decoration: none;
+        transition: color .15s;
+    }
+    .back-link:hover { color: var(--clr-text); }
+
+    @@media (max-width: 480px) {
+        .start-header, .start-tips, .start-action { padding-left: 20px; padding-right: 20px; }
+        .start-title { font-size: 1.15rem; }
+    }
+</style>
+}
+
+<div class="start-wrap">
+    <div class="start-card">
+
+        <!-- HEADER -->
+        <div class="start-header">
+            <div class="start-subject">
+                <i class="bi bi-book"></i> @Model.SubjectName
+            </div>
+            <div class="start-title">@Model.TestName</div>
+        </div>
+
+        <!-- META -->
+        <div class="start-meta">
+            <div class="meta-cell">
+                <div class="meta-icon blue"><i class="bi bi-question-circle"></i></div>
+                <div class="meta-val">@Model.TotalQuestions</div>
+                <div class="meta-lbl">питань</div>
+            </div>
+            <div class="meta-cell">
+                @if (Model.TimeLimit.HasValue)
+                {
+                    <div class="meta-icon amber"><i class="bi bi-clock"></i></div>
+                    <div class="meta-val">@Model.TimeLimit хв</div>
+                    <div class="meta-lbl">ліміт часу</div>
+                }
+                else
+                {
+                    <div class="meta-icon green"><i class="bi bi-infinity"></i></div>
+                    <div class="meta-val">∞</div>
+                    <div class="meta-lbl">без ліміту</div>
+                }
+            </div>
+            <div class="meta-cell">
+                <div class="meta-icon purple"><i class="bi bi-bar-chart-line"></i></div>
+                <div class="meta-val">100–200</div>
+                <div class="meta-lbl">шкала НМТ</div>
+            </div>
+        </div>
+
+        <!-- TIPS -->
+        <div class="start-tips">
+            <div class="tips-title">Підказки</div>
+            <div class="tip-item">
+                <div class="tip-dot"></div>
+                Клавіші <strong style="color:var(--clr-text)">A–D</strong> для вибору відповіді
+            </div>
+            <div class="tip-item">
+                <div class="tip-dot"></div>
+                <strong style="color:var(--clr-text)">Enter</strong> — перейти до наступного питання
+            </div>
+            @if (Model.TimeLimit.HasValue)
+            {
+                <div class="tip-item">
+                    <div class="tip-dot" style="background:var(--clr-warn)"></div>
+                    Таймер <strong style="color:var(--clr-warn)">пожовтіє</strong> за 2 хв і <strong style="color:#f43f5e">червоніє</strong> за 30 сек
+                </div>
+            }
+            <div class="tip-item">
+                <div class="tip-dot" style="background:var(--clr-success)"></div>
+                Результат покаже прогноз балу НМТ
+            </div>
+        </div>
+
+        <!-- ACTION -->
+        <div class="start-action">
+            <a asp-action="Question"
+               asp-route-testId="@Model.TestId"
+               asp-route-questionIndex="0"
+               class="btn-start">
+                <i class="bi bi-play-fill"></i> Почати тест
+            </a>
+            <a href="/Tests" class="back-link">
+                <i class="bi bi-arrow-left"></i> Повернутись до тестів
+            </a>
+        </div>
+
+    </div>
+</div>
+=======
 ﻿@model ZNOWay.ViewModels.TestRunViewModel
 @{
     ViewData["Title"] = "Start";
@@ -28,3 +284,4 @@
         </div>
     </div>
 </div>
+>>>>>>> 090e2cd928202a10759c36d84e6664f30602fc76
