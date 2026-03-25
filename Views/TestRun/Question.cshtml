@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @model ZNOWay.ViewModels.QuestionViewModel
 @{
     ViewData["Title"] = "Питання " + Model.CurrentNumber;
@@ -427,3 +428,82 @@
     }
 </script>
 }
+=======
+﻿@model ZNOWay.ViewModels.QuestionViewModel
+@{
+    ViewData["Title"] = "Question";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span class="fw-bold">Питання @Model.CurrentNumber з @Model.TotalQuestions</span>
+                <div class="progress w-50">
+                    <div class="progress-bar"
+                         style="width: @(Model.CurrentNumber * 100 / Model.TotalQuestions)%">
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <h5 class="mb-4">@Model.QuestionText</h5>
+
+                <form asp-action="Answer" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="testId" value="@Model.TestId" />
+                    <input type="hidden" name="questionId" value="@Model.QuestionId" />
+                    <input type="hidden" name="questionIndex" value="@Model.CurrentNumber" />
+
+                    @foreach (var option in Model.Options)
+                    {
+                        <div class="form-check mb-3 p-3 border rounded">
+                            @if (Model.QuestionType == ZNOWay.Models.QuestionType.Multiple)
+                            {
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       name="selectedOptions"
+                                       value="@option.Id"
+                                       id="opt_@option.Id" />
+                            }
+                            else
+                            {
+                                <input class="form-check-input"
+                                       type="radio"
+                                       name="selectedOptions"
+                                       value="@option.Id"
+                                       id="opt_@option.Id" />
+                            }
+                            <label class="form-check-label w-100" for="opt_@option.Id">
+                                @option.Text
+                            </label>
+                        </div>
+                    }
+
+                    <button type="submit" class="btn btn-primary w-100 mt-3">
+                        @(Model.CurrentNumber == Model.TotalQuestions ? "Завершити тест" : "Наступне питання")
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    @if (Context.Session.GetInt32($"timelimit_{Model.TestId}") != null)
+    {
+        <div id="timer" class="text-end text-danger fw-bold mt-2"></div>
+        <script>
+            var seconds = @(Context.Session.GetInt32($"timelimit_{Model.TestId}") * 60 ?? 0);
+            var t = document.getElementById('timer');
+            var interval = setInterval(function() {
+                if (seconds <= 0) {
+                    clearInterval(interval);
+                    document.querySelector('form').submit();
+                    return;
+                }
+                seconds--;
+                var m = Math.floor(seconds / 60);
+                var s = seconds % 60;
+                t.textContent = 'Залишилось: ' + m + ':' + (s < 10 ? '0' : '') + s;
+            }, 1000);
+        </script>
+    }
+</div>
+>>>>>>> 090e2cd928202a10759c36d84e6664f30602fc76

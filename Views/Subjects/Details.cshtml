@@ -1,0 +1,5 @@
+@model ZNOWay.Models.Subject
+@{ ViewData["Title"] = "����� ��������"; }
+<h2>@Model.Name</h2>
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">����������</a>
+<a asp-action="Index" class="btn btn-secondary">�����</a>

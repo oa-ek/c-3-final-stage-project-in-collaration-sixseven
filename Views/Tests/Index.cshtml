@@ -1,6 +1,7 @@
 @model IEnumerable<ZNOWay.Models.Test>
 @{
     ViewData["Title"] = "Тести";
+<<<<<<< HEAD
     ViewData["ActivePage"] = "Tests";
 }
 
@@ -278,3 +279,45 @@
     }
 </script>
 }
+=======
+}
+
+<h2>Тести</h2>
+
+@if (User.IsInRole("Admin"))
+{
+    <a asp-action="Create" class="btn btn-primary mb-3">+ Додати тест</a>
+}
+
+<table class="table table-hover">
+    <thead class="table-light">
+        <tr>
+            <th>Назва</th>
+            <th>Предмет</th>
+            <th>Тип</th>
+            <th>Час (хв)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Subject?.Name</td>
+                <td>@item.Type</td>
+                <td>@(item.TimeLimit.HasValue? item.TimeLimit.ToString() : "—")</td>
+                <td>
+                    <a asp-controller="TestRun" asp-action="Start" asp-route-id="@item.Id"
+                       class="btn btn-success btn-sm">▶ Пройти</a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Ред.</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Вид.</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+>>>>>>> 090e2cd928202a10759c36d84e6664f30602fc76
