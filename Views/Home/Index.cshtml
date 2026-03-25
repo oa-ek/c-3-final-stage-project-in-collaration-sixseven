@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 @{
     ViewData["Title"] = "Головна";
 }
@@ -394,83 +394,3 @@
                             <p>Зберігай складні питання в обране щоб повернутися до них пізніше.</p>
                         </div>
                     </div>
-=======
-﻿@{
-    ViewData["Title"] = "Головна";
-}
-
-@if (User.Identity != null && User.Identity.IsAuthenticated)
-{
-    <div class="row">
-        <div class="col-12 text-center mb-5">
-            <h1 class="display-5 fw-bold">Ласкаво просимо, @User.Identity.Name! 👋</h1>
-            <p class="lead text-muted">Обирай тест і починай підготовку до ЗНО</p>
-        </div>
-    </div>
-
-    <div class="row g-4 justify-content-center">
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm border-0">
-                <div class="card-body text-center p-4">
-                    <div class="display-4 mb-3">📖</div>
-                    <h5 class="card-title">Тести</h5>
-                    <p class="card-text text-muted">Переглянь доступні тести та почни підготовку</p>
-                    <a asp-controller="Tests" asp-action="Index" class="btn btn-primary">Перейти до тестів</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm border-0">
-                <div class="card-body text-center p-4">
-                    <div class="display-4 mb-3">📚</div>
-                    <h5 class="card-title">Предмети</h5>
-                    <p class="card-text text-muted">Переглянь всі предмети та теми</p>
-                    <a asp-controller="Subjects" asp-action="Index" class="btn btn-outline-primary">Предмети</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm border-0">
-                <div class="card-body text-center p-4">
-                    <div class="display-4 mb-3">🏆</div>
-                    <h5 class="card-title">Мої результати</h5>
-                    <p class="card-text text-muted">Переглянь свою статистику та прогрес</p>
-                    <a asp-controller="UserResults" asp-action="Index" class="btn btn-outline-success">Результати</a>
->>>>>>> 090e2cd928202a10759c36d84e6664f30602fc76
-                </div>
-            </div>
-        </div>
-    </div>
-<<<<<<< HEAD
-</section>
-
-<!-- ═══ CTA ═══ -->
-<section class="section">
-    <div class="container">
-        <div class="cta-block">
-            <h2>Готовий до 200 балів?</h2>
-            <p>Реєструйся зараз — це безкоштовно та займає менше хвилини</p>
-            <a href="/Account/Register" class="btn-zno btn-primary-zno" style="padding:14px 40px;font-size:1.05rem">
-                <i class="bi bi-rocket-takeoff"></i> Розпочати підготовку
-            </a>
-        </div>
-    </div>
-</section>
-=======
-}
-else
-{
-    <div class="row justify-content-center mt-5">
-        <div class="col-md-6 text-center">
-            <h1 class="display-4 fw-bold mb-3">📚 ZNOWay</h1>
-            <p class="lead mb-4">Платформа для підготовки до ЗНО. Тести, теми, результати — все в одному місці.</p>
-            <a asp-controller="Account" asp-action="Register" class="btn btn-success btn-lg me-3">
-                Зареєструватись
-            </a>
-            <a asp-controller="Account" asp-action="Login" class="btn btn-outline-primary btn-lg">
-                Увійти
-            </a>
-        </div>
-    </div>
-}
->>>>>>> 090e2cd928202a10759c36d84e6664f30602fc76
