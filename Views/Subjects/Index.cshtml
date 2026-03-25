@@ -1,19 +1,71 @@
 @model IEnumerable<ZNOWay.Models.Subject>
-@{ ViewData["Title"] = "��������"; }
-<h2>��������</h2>
-<a asp-action="Create" class="btn btn-primary mb-3">+ ������ �������</a>
-<table class="table">
-    <thead><tr><th>�����</th><th></th></tr></thead>
-    <tbody>
-    @foreach (var item in Model) {
-        <tr>
-            <td>@item.Name</td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">����������</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">�����</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">��������</a>
-            </td>
-        </tr>
+@{
+    ViewData["Title"] = "Предмети";
+    ViewData["ActivePage"] = "Subjects";
+    Layout = "_Layout";
+}
+
+<div class="container py-5">
+    <div class="page-header">
+        <div style="display:flex; align-items:center; justify-content:space-between">
+            <h1><i class="bi bi-book me-2" style="color:var(--clr-accent)"></i>Предмети</h1>
+            <a asp-action="Create" class="btn-zno btn-primary-zno">
+                <i class="bi bi-plus-lg"></i> Додати предмет
+            </a>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="card-zno text-center" style="padding:60px">
+            <i class="bi bi-book" style="font-size:3rem; color:var(--clr-muted)"></i>
+            <p style="color:var(--clr-muted); margin-top:16px">Предметів ще немає</p>
+            <a asp-action="Create" class="btn-zno btn-primary-zno" style="margin-top:12px">
+                Додати перший предмет
+            </a>
+        </div>
     }
-    </tbody>
-</table>
+    else
+    {
+        <div class="row g-3">
+            @foreach (var item in Model)
+            {
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="card-zno">
+                        <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px">
+                            <div style="width:42px; height:42px; border-radius:10px;
+                                         background:rgba(79,138,255,.15);
+                                         display:flex; align-items:center; justify-content:center; flex-shrink:0">
+                                <i class="bi bi-book" style="color:var(--clr-accent)"></i>
+                            </div>
+                            <div style="font-weight:600; color:var(--clr-text)">@item.Name</div>
+                        </div>
+                        <div style="display:flex; gap:8px; flex-wrap:wrap">
+                            <a asp-action="Details" asp-route-id="@item.Id"
+                               style="flex:1; text-align:center; padding:7px 10px; background:var(--clr-surface);
+                                              border:1px solid var(--clr-border); border-radius:var(--radius-sm);
+                                              color:var(--clr-muted); text-decoration:none; font-size:.8rem;
+                                              transition:all .2s ease">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a asp-action="Edit" asp-route-id="@item.Id"
+                               style="flex:1; text-align:center; padding:7px 10px; background:rgba(79,138,255,.1);
+                                              border:1px solid rgba(79,138,255,.3); border-radius:var(--radius-sm);
+                                              color:var(--clr-accent); text-decoration:none; font-size:.8rem;
+                                              transition:all .2s ease">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.Id"
+                               style="flex:1; text-align:center; padding:7px 10px; background:rgba(244,63,94,.1);
+                                              border:1px solid rgba(244,63,94,.3); border-radius:var(--radius-sm);
+                                              color:#f87171; text-decoration:none; font-size:.8rem;
+                                              transition:all .2s ease">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

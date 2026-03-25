@@ -9,5 +9,6 @@ namespace ZNOWay.Models
         public int TimeSpent { get; set; }
         public User User { get; set; } = null!;
         public Test Test { get; set; } = null!;
+        public int TotalQuestions { get; set; }
     }
 }

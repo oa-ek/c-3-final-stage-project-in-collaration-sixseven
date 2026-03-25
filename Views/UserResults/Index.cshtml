@@ -1,17 +1,50 @@
 @model IEnumerable<ZNOWay.Models.UserResult>
-@{ ViewData["Title"] = "����������"; }
-<h2>����������</h2>
-<table class="table">
-    <thead><tr><th>����������</th><th>����</th><th>����</th><th>��� (���)</th><th></th></tr></thead>
-    <tbody>
-    @foreach (var item in Model) {
-        <tr>
-            <td>@item.User?.Email</td>
-            <td>@item.Test?.Name</td>
-            <td>@item.Score</td>
-            <td>@item.TimeSpent</td>
-            <td><a asp-action="Delete" asp-route-id="@item.Id">��������</a></td>
-        </tr>
-    }
-    </tbody>
-</table>
+@{
+    ViewData["Title"] = "Результати тестів";
+    ViewData["ActivePage"] = "Results";
+    Layout = "_Layout";
+}
+
+<div class="container py-5">
+    <div class="page-header">
+        <h1><i class="bi bi-bar-chart-line me-2" style="color:var(--clr-accent2)"></i>Результати</h1>
+    </div>
+
+    <div class="card-zno">
+        <div class="table-responsive">
+            <table class="table" style="color: var(--clr-text); border-color: var(--clr-border);">
+                <thead>
+                    <tr style="color: var(--clr-muted); font-size: .85rem; text-transform: uppercase;">
+                        <th style="padding: 15px;">Студент</th>
+                        <th>Тест</th>
+                        <th>Бали</th>
+                        <th>Відсоток</th>
+                        <th>Дата</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        var pct = item.TotalQuestions > 0 ? (int)((double)item.Score / item.TotalQuestions * 100) : 0;
+                        var color = pct >= 75 ? "var(--clr-success)" : pct >= 50 ? "var(--clr-warn)" : "#f87171";
+
+                        <tr style="border-bottom: 1px solid var(--clr-border); vertical-align: middle;">
+                            <td style="padding: 15px;">@item.User?.Email</td>
+                            <td><span style="font-weight: 600;">@item.Test?.Name</span></td>
+                            <td><span style="color: var(--clr-accent); font-weight: 700;">@item.Score</span> / @item.TotalQuestions</td>
+                            <td>
+                                <div style="display:flex; align-items:center; gap:10px">
+                                    <div class="progress-zno" style="flex:1; width: 60px;">
+                                        <div class="progress-zno-fill" style="width:@pct%; background:@color"></div>
+                                    </div>
+                                    <span style="color:@color; font-weight:700; font-size:.85rem">@pct%</span>
+                                </div>
+                            </td>
+                            <td style="color: var(--clr-muted); font-size: .85rem;">@item.Id</td> @* Можна замінити на дату, якщо є поле Date *@
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

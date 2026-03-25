@@ -1,13 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ZNOWay.Data;
 using ZNOWay.Models;
-using Microsoft.AspNetCore.Authorization;
 
 namespace ZNOWay.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class TopicsController : Controller
     {
         private readonly AppDbContext _context;
@@ -24,101 +24,73 @@ namespace ZNOWay.Controllers
 
         public IActionResult Create()
         {
-            ViewBag.Subjects = new SelectList(_context.Subjects, "Id", "Name");
+            ViewBag.SubjectId = new SelectList(_context.Subjects, "Id", "Name");
             return View();
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Topic topic)
         {
+            ModelState.Remove("Subject");
+
             if (ModelState.IsValid)
             {
                 _context.Add(topic);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.Subjects = new SelectList(_context.Subjects, "Id", "Name");
+            ViewBag.SubjectId = new SelectList(_context.Subjects, "Id", "Name", topic.SubjectId);
             return View(topic);
         }
 
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(int? id)
         {
+            if (id == null) return NotFound();
+
             var topic = await _context.Topics.FindAsync(id);
             if (topic == null) return NotFound();
-            ViewBag.Subjects = new SelectList(_context.Subjects, "Id", "Name");
+
+            ViewBag.SubjectId = new SelectList(_context.Subjects, "Id", "Name", topic.SubjectId);
             return View(topic);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Topic topic)
         {
             if (id != topic.Id) return NotFound();
- 
-           if (ModelState.IsValid)
+
+            ModelState.Remove("Subject");
+
+            if (ModelState.IsValid)
             {
                 _context.Update(topic);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.Subjects = new SelectList(_context.Subjects, "Id", "Name");
+            ViewBag.SubjectId = new SelectList(_context.Subjects, "Id", "Name", topic.SubjectId);
             return View(topic);
- 
+        }
 
-
-
-
-
-
-
-       }
-
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int? id)
         {
-            var topic = await _context.Topics.Include(t => t.Subject).FirstOrDefaultAsync(t => t.Id == id);
+            if (id == null) return NotFound();
+
+            var topic = await _context.Topics.Include(t => t.Subject).FirstOrDefaultAsync(m => m.Id == id);
             if (topic == null) return NotFound();
- 
 
-
-
-
-
-           return View(topic);
+            return View(topic);
         }
 
         [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
- 
-
-
-
-
-
-           var topic = await _context.Topics.FindAsync(id);
+            var topic = await _context.Topics.FindAsync(id);
             if (topic != null) _context.Topics.Remove(topic);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
-
-
-
-
-
-        public async Task<IActionResult> Details(int id)
-        {
-            var topic = await _context.Topics.Include(t => t.Subject).FirstOrDefaultAsync(t => t.Id == id);
- 
-
-
-
-           if (topic == null) return NotFound();
-            return View(topic);
-        }
-  
-
-
-  }
-
+    }
 }
-

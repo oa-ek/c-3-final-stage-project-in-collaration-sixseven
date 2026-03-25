@@ -1,23 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 using ZNOWay.Data;
 using ZNOWay.ViewModels;
 
 namespace ZNOWay.Controllers
 {
     [Authorize]
-    public class TestRunController : Controller
+    public class TestRunController(AppDbContext context) : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _context = context;
 
-        public TestRunController(AppDbContext context)
-        {
-            _context = context;
-        }
-
-        // Сторінка перед початком тесту — показує назву, кількість питань, час
+        // GET: /TestRun/Start/5
         public async Task<IActionResult> Start(int id)
         {
             var test = await _context.Tests
@@ -35,14 +29,11 @@ namespace ZNOWay.Controllers
                 TotalQuestions = test.Questions.Count,
                 TimeLimit = test.TimeLimit
             };
-            if (test.TimeLimit.HasValue)
-                HttpContext.Session.SetInt32($"timelimit_{test.Id}", test.TimeLimit.Value);
 
             return View(model);
         }
 
-        // GET: /TestRun/Question/5?questionIndex=0
-        // Показує одне питання за раз
+        // GET: /TestRun/Question?testId=5&questionIndex=0
         public async Task<IActionResult> Question(int testId, int questionIndex = 0)
         {
             var test = await _context.Tests
@@ -74,19 +65,16 @@ namespace ZNOWay.Controllers
                 }).ToList()
             };
 
-            // Зберігаємо індекс питання в сесії
             HttpContext.Session.SetInt32($"test_{testId}_current", questionIndex);
 
             return View(model);
         }
 
         // POST: /TestRun/Answer
-        // Приймає відповідь користувача і переходить до наступного питання
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Answer(int testId, int questionId, int questionIndex, List<int> selectedOptions)
         {
-            // Зберігаємо відповіді в сесії
             var key = $"test_{testId}_answers_{questionId}";
             var value = string.Join(",", selectedOptions);
             HttpContext.Session.SetString(key, value);
@@ -94,8 +82,7 @@ namespace ZNOWay.Controllers
             return RedirectToAction("Question", new { testId, questionIndex = questionIndex + 1 });
         }
 
-        // GET: /TestRun/Finish/5
-        // Підраховує результат і зберігає в БД
+        // GET: /TestRun/Finish?testId=5
         public async Task<IActionResult> Finish(int testId)
         {
             var test = await _context.Tests
@@ -114,36 +101,40 @@ namespace ZNOWay.Controllers
 
                 if (savedAnswer == null) continue;
 
-                var selectedIds = savedAnswer.Split(',')
+                var selectedIds = savedAnswer
+                    .Split(',')
                     .Where(s => int.TryParse(s, out _))
                     .Select(int.Parse)
+                    .OrderBy(x => x)
                     .ToList();
 
                 var correctIds = question.AnswerOptions
                     .Where(a => a.IsCorrect)
                     .Select(a => a.Id)
+                    .OrderBy(x => x)
                     .ToList();
 
-                if (selectedIds.OrderBy(x => x).SequenceEqual(correctIds.OrderBy(x => x)))
+                if (selectedIds.SequenceEqual(correctIds))
                     score++;
             }
 
-            // Отримуємо UserId з claims
+            // Зберігаємо результат в БД
             var userIdClaim = User.FindFirst("UserId")?.Value;
-            if (userIdClaim != null && int.TryParse(userIdClaim, out int userId))
+            if (int.TryParse(userIdClaim, out int userId))
             {
-                var result = new ZNOWay.Models.UserResult
+                var userResult = new ZNOWay.Models.UserResult
                 {
                     UserId = userId,
                     TestId = testId,
                     Score = score,
+                    TotalQuestions = test.Questions.Count,
                     TimeSpent = 0
                 };
-                _context.UserResults.Add(result);
+                _context.UserResults.Add(userResult);
                 await _context.SaveChangesAsync();
             }
 
-            var model = new ResultViewModel
+            var resultModel = new ResultViewModel
             {
                 TestName = test.Name,
                 Score = score,
@@ -151,7 +142,7 @@ namespace ZNOWay.Controllers
                 TimeSpent = 0
             };
 
-            return View("Result", model);
+            return View("Result", resultModel);
         }
     }
 }

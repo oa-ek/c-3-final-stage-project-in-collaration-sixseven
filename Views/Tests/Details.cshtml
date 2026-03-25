@@ -1,7 +1,33 @@
 @model ZNOWay.Models.Test
-@{ ViewData["Title"] = "����� �����"; }
-<h2>@Model.Name</h2>
-<p>�������: @Model.Subject?.Name</p>
-<p>���: @Model.Type</p>
-<p>���: @Model.TimeLimit ��</p>
-<a asp-action="Index" class="btn btn-secondary">�����</a>
+@{
+    ViewData["Title"] = "Деталі тесту";
+    Layout = "_Layout";
+}
+
+<div class="container py-5">
+    <div style="max-width:600px; margin:0 auto">
+        <div class="card-zno">
+            <h2 style="font-family:var(--font-display); font-size:1.3rem; margin-bottom:20px">@Model.Name</h2>
+
+            <div style="display:grid; gap:12px; margin-bottom:30px">
+                <div style="display:flex; justify-content:space-between; padding:12px; background:var(--clr-surface); border-radius:8px">
+                    <span class="text-muted">Предмет:</span>
+                    <span style="color:var(--clr-accent); font-weight:600">@Model.Subject?.Name</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding:12px; background:var(--clr-surface); border-radius:8px">
+                    <span class="text-muted">Тип:</span>
+                    <span>@Model.Type</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding:12px; background:var(--clr-surface); border-radius:8px">
+                    <span class="text-muted">Ліміт часу:</span>
+                    <span style="color:var(--clr-warn)">@Model.TimeLimit хв</span>
+                </div>
+            </div>
+
+            <div style="display:flex; gap:10px">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-zno btn-primary-zno">Редагувати</a>
+                <a asp-action="Index" class="btn-zno btn-ghost-zno">До списку</a>
+            </div>
+        </div>
+    </div>
+</div>

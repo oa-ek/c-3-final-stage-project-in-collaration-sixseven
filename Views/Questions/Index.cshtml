@@ -1,20 +1,51 @@
 @model IEnumerable<ZNOWay.Models.Question>
-@{ ViewData["Title"] = "�������"; }
-<h2>�������</h2>
-<a asp-action="Create" class="btn btn-primary mb-3">+ ������ �������</a>
-<table class="table">
-    <thead><tr><th>�����</th><th>���</th><th>����</th><th></th></tr></thead>
-    <tbody>
-    @foreach (var item in Model) {
-        <tr>
-            <td>@item.Text</td>
-            <td>@item.Type</td>
-            <td>@item.Test?.Name</td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">����������</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">��������</a>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+@{
+    ViewData["Title"] = "Управління питаннями";
+    ViewData["ActivePage"] = "Admin";
+    Layout = "_Layout";
+}
+
+<div class="container py-5">
+    <div class="page-header">
+        <div style="display:flex; align-items:center; justify-content:space-between">
+            <h1><i class="bi bi-question-circle me-2" style="color:var(--clr-warn)"></i>Питання</h1>
+            <a asp-action="Create" class="btn-zno btn-primary-zno">
+                <i class="bi bi-plus-lg"></i> Додати питання
+            </a>
+        </div>
+    </div>
+
+    <div class="card-zno">
+        <div class="table-responsive">
+            <table class="table" style="color: var(--clr-text); border-color: var(--clr-border);">
+                <thead>
+                    <tr style="color: var(--clr-muted); font-size: .85rem; text-transform: uppercase;">
+                        <th style="padding: 15px;">Текст питання</th>
+                        <th>Тест</th>
+                        <th>Тип</th>
+                        <th>Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr style="border-bottom: 1px solid var(--clr-border); vertical-align: middle;">
+                                <td style="padding: 15px; max-width: 400px;">@item.Text</td>
+                                <td><span class="badge-zno badge-blue">@(item.Test?.Name ?? "Без тесту")</span></td>
+                                <td><span class="badge-zno badge-purple">@item.Type</span></td>
+                                <td>
+                                    <div style="display:flex; gap:8px">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn-zno btn-ghost-zno" style="padding: 5px 10px;"><i class="bi bi-pencil"></i></a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn-zno" style="padding: 5px 10px; background:rgba(244,63,94,.1); color:#f87171; border:1px solid rgba(244,63,94,.3)"><i class="bi bi-trash"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

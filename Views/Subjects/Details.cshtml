@@ -1,5 +1,31 @@
 @model ZNOWay.Models.Subject
-@{ ViewData["Title"] = "����� ��������"; }
-<h2>@Model.Name</h2>
-<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">����������</a>
-<a asp-action="Index" class="btn btn-secondary">�����</a>
+@{
+    ViewData["Title"] = "Деталі предмету";
+    Layout = "_Layout";
+}
+
+<div class="container py-5">
+    <div style="max-width:500px; margin:0 auto">
+        <div class="card-zno">
+            <div style="display:flex; align-items:center; gap:14px; margin-bottom:20px">
+                <div style="width:50px; height:50px; border-radius:12px;
+                     background:rgba(79,138,255,.15);
+                     display:flex; align-items:center; justify-content:center">
+                    <i class="bi bi-book" style="color:var(--clr-accent); font-size:1.3rem"></i>
+                </div>
+                <div>
+                    <div style="font-size:.75rem; color:var(--clr-muted); margin-bottom:2px">Предмет</div>
+                    <div style="font-size:1.2rem; font-weight:700">@Model.Name</div>
+                </div>
+            </div>
+            <div style="display:flex; gap:10px">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-zno btn-primary-zno">
+                    <i class="bi bi-pencil"></i> Редагувати
+                </a>
+                <a asp-action="Index" class="btn-zno btn-ghost-zno">
+                    <i class="bi bi-arrow-left"></i> Назад
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

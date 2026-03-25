@@ -1,9 +1,26 @@
 @model ZNOWay.Models.Subject
-@{ ViewData["Title"] = "�������� �������"; }
-<h2>�������� �������?</h2>
-<p>�����: <strong>@Model.Name</strong></p>
-<form asp-action="Delete">
-    <input type="hidden" asp-for="Id" />
-    <button type="submit" class="btn btn-danger">��������</button>
-    <a asp-action="Index" class="btn btn-secondary">���������</a>
-</form>
+@{
+    ViewData["Title"] = "Видалити предмет";
+    Layout = "_Layout";
+}
+
+<div class="container py-5">
+    <div style="max-width:500px; margin:0 auto">
+        <div class="card-zno" style="border-color:rgba(244,63,94,.3)">
+            <div style="text-align:center; padding:20px 0">
+                <i class="bi bi-exclamation-triangle" style="font-size:3rem; color:#f87171"></i>
+                <h3 style="margin-top:16px; font-family:var(--font-display)">Видалити предмет?</h3>
+                <p style="color:var(--clr-muted); margin-top:8px">
+                    Ця дія незворотня. Предмет <strong style="color:var(--clr-text)">@Model.Name</strong> буде видалено.
+                </p>
+            </div>
+            <form asp-action="Delete" style="display:flex; gap:10px; justify-content:center; margin-top:10px">
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn-zno" style="background:rgba(244,63,94,.15); color:#f87171; border:1px solid rgba(244,63,94,.3)">
+                    <i class="bi bi-trash"></i> Так, видалити
+                </button>
+                <a asp-action="Index" class="btn-zno btn-ghost-zno">Скасувати</a>
+            </form>
+        </div>
+    </div>
+</div>

@@ -15,18 +15,24 @@ namespace ZNOWay.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            if (!User.Identity!.IsAuthenticated)
+                return RedirectToAction("Login", "Account");
+
+            if (User.IsInRole("Admin"))
+                return RedirectToAction("Index", "Admin");
+
+            return RedirectToAction("Index", "Dashboard");
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+        public IActionResult Privacy() => View();
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new ErrorViewModel
+            {
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            });
         }
     }
 }

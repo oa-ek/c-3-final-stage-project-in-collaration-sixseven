@@ -1,9 +1,23 @@
 @model ZNOWay.Models.Test
-@{ ViewData["Title"] = "�������� ����"; }
-<h2>�������� ����?</h2>
-<p>�����: <strong>@Model.Name</strong></p>
-<form asp-action="Delete">
-    <input type="hidden" asp-for="Id" />
-    <button type="submit" class="btn btn-danger">��������</button>
-    <a asp-action="Index" class="btn btn-secondary">���������</a>
-</form>
+@{
+    ViewData["Title"] = "Видалити тест";
+    Layout = "_Layout";
+}
+
+<div class="container py-5">
+    <div style="max-width:500px; margin:0 auto">
+        <div class="card-zno" style="border-color:rgba(244,63,94,.3)">
+            <div style="text-align:center; padding:20px">
+                <i class="bi bi-trash3" style="font-size:3rem; color:#f87171"></i>
+                <h3 style="margin-top:15px">Видалити тест?</h3>
+                <p class="text-muted">Ви збираєтесь видалити тест <br /><strong>@Model.Name</strong></p>
+            </div>
+
+            <form asp-action="Delete" style="display:flex; gap:10px; margin-top:10px">
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn-zno" style="background:rgba(244,63,94,.15); color:#f87171; border:1px solid rgba(244,63,94,.3); flex:1; justify-content:center">Видалити</button>
+                <a asp-action="Index" class="btn-zno btn-ghost-zno" style="flex:1; justify-content:center">Скасувати</a>
+            </form>
+        </div>
+    </div>
+</div>

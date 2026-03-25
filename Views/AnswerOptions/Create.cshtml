@@ -1,21 +1,39 @@
 @model ZNOWay.Models.AnswerOption
-@{ ViewData["Title"] = "�������� ������ ������"; }
-<h2>�������� ������ ������</h2>
-<form asp-action="Create">
-    <div class="form-group mb-3">
-        <label asp-for="Text">����� ������</label>
-        <input asp-for="Text" class="form-control" />
-    </div>
-    <div class="form-group mb-3">
-        <div class="form-check">
-            <input asp-for="IsCorrect" class="form-check-input" type="checkbox" />
-            <label asp-for="IsCorrect" class="form-check-label">��������� �������</label>
+@{
+    ViewData["Title"] = "Додати варіант";
+    Layout = "_Layout";
+}
+
+<div class="container py-5">
+    <div style="max-width:600px; margin:0 auto">
+        <div class="page-header">
+            <h1><i class="bi bi-plus-circle me-2" style="color:var(--clr-accent)"></i>Новий варіант</h1>
+        </div>
+        <div class="card-zno">
+            <form asp-action="Create">
+                <div style="margin-bottom:20px">
+                    <label class="text-muted small mb-2 d-block">Виберіть питання</label>
+                    <select asp-for="QuestionId" class="form-control-zno" asp-items="ViewBag.QuestionId"></select>
+                </div>
+
+                <div style="margin-bottom:20px">
+                    <label class="text-muted small mb-2 d-block">Текст відповіді</label>
+                    <input asp-for="Text" class="form-control-zno" placeholder="Введіть текст варіанту..." />
+                    <span asp-validation-for="Text" class="text-danger small"></span>
+                </div>
+
+                <div style="margin-bottom:25px; display:flex; align-items:center; gap:10px">
+                    <input asp-for="IsCorrect" type="checkbox" style="width: 20px; height: 20px; accent-color: var(--clr-success);" />
+                    <label asp-for="IsCorrect" style="font-weight: 600; color: var(--clr-success); cursor:pointer;">Це правильна відповідь</label>
+                </div>
+
+                <div style="display:flex; gap:10px">
+                    <button type="submit" class="btn-zno btn-primary-zno">
+                        <i class="bi bi-check-lg"></i> Додати
+                    </button>
+                    <a asp-action="Index" class="btn-zno btn-ghost-zno">Назад</a>
+                </div>
+            </form>
         </div>
     </div>
-    <div class="form-group mb-3">
-        <label asp-for="QuestionId">�������</label>
-        <select asp-for="QuestionId" asp-items="ViewBag.Questions" class="form-control"></select>
-    </div>
-    <button type="submit" class="btn btn-primary">��������</button>
-    <a asp-action="Index" class="btn btn-secondary">�����</a>
-</form>
+</div>

@@ -1,13 +1,29 @@
 @model ZNOWay.Models.Subject
-@{ ViewData["Title"] = "���������� �������"; }
-<h2>���������� �������</h2>
-<form asp-action="Edit">
-    <input type="hidden" asp-for="Id" />
-    <div class="form-group mb-3">
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+@{
+    ViewData["Title"] = "Редагувати предмет";
+    Layout = "_Layout";
+}
+
+<div class="container py-5">
+    <div style="max-width:500px; margin:0 auto">
+        <div class="page-header">
+            <h1><i class="bi bi-pencil me-2" style="color:var(--clr-accent)"></i>Редагувати предмет</h1>
+        </div>
+        <div class="card-zno">
+            <form asp-action="Edit">
+                <input type="hidden" asp-for="Id" />
+                <div style="margin-bottom:20px">
+                    <label style="display:block; margin-bottom:6px; font-size:.875rem; color:var(--clr-muted)">Назва предмету</label>
+                    <input asp-for="Name" class="form-control-zno" />
+                    <span asp-validation-for="Name" style="color:#f87171; font-size:.8rem"></span>
+                </div>
+                <div style="display:flex; gap:10px">
+                    <button type="submit" class="btn-zno btn-primary-zno">
+                        <i class="bi bi-check-lg"></i> Зберегти
+                    </button>
+                    <a asp-action="Index" class="btn-zno btn-ghost-zno">Скасувати</a>
+                </div>
+            </form>
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary">��������</button>
-    <a asp-action="Index" class="btn btn-secondary">�����</a>
-</form>
+</div>

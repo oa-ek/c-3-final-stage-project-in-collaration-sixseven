@@ -1,27 +1,43 @@
 @model ZNOWay.Models.Test
-@{ ViewData["Title"] = "���������� ����"; }
-<h2>���������� ����</h2>
-<form asp-action="Edit">
-    <input type="hidden" asp-for="Id" />
-    <div class="form-group mb-3">
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" />
+@{
+    ViewData["Title"] = "Редагувати тест";
+    Layout = "_Layout";
+}
+
+<div class="container py-5">
+    <div style="max-width:700px; margin:0 auto">
+        <div class="page-header">
+            <h1><i class="bi bi-pencil-square me-2" style="color:var(--clr-success)"></i>Редагувати тест</h1>
+        </div>
+        <div class="card-zno">
+            <form asp-action="Edit">
+                <input type="hidden" asp-for="Id" />
+
+                <div style="margin-bottom:20px">
+                    <label class="text-muted small mb-2 d-block">Назва тесту</label>
+                    <input asp-for="Name" class="form-control-zno" style="background: var(--clr-surface); color: white; border: 1px solid var(--clr-border); padding: 10px; width: 100%; border-radius: 8px;" />
+                </div>
+
+                <div style="margin-bottom:20px">
+                    <label class="text-muted small mb-2 d-block">Предмет</label>
+                    <select asp-for="SubjectId" class="form-control-zno" asp-items="ViewBag.SubjectId" style="background: var(--clr-surface); color: white; border: 1px solid var(--clr-border); padding: 10px; width: 100%; border-radius: 8px;"></select>
+                </div>
+
+                <div style="margin-bottom:20px">
+                    <label class="text-muted small mb-2 d-block">Тип</label>
+                    <input asp-for="Type" class="form-control-zno" style="background: var(--clr-surface); color: white; border: 1px solid var(--clr-border); padding: 10px; width: 100%; border-radius: 8px;" />
+                </div>
+
+                <div style="margin-bottom:25px">
+                    <label class="text-muted small mb-2 d-block">Час (хвилини)</label>
+                    <input asp-for="TimeLimit" type="number" class="form-control-zno" style="background: var(--clr-surface); color: white; border: 1px solid var(--clr-border); padding: 10px; width: 100%; border-radius: 8px;" />
+                </div>
+
+                <div style="display:flex; gap:10px">
+                    <button type="submit" class="btn-zno btn-primary-zno">Зберегти зміни</button>
+                    <a asp-action="Index" class="btn-zno btn-ghost-zno">Назад</a>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="form-group mb-3">
-        <label asp-for="SubjectId">�������</label>
-        <select asp-for="SubjectId" asp-items="ViewBag.Subjects" class="form-control"></select>
-    </div>
-    <div class="form-group mb-3">
-        <label asp-for="Type">���</label>
-        <select asp-for="Type" class="form-control">
-            <option value="0">Exam</option>
-            <option value="1">Training</option>
-        </select>
-    </div>
-    <div class="form-group mb-3">
-        <label asp-for="TimeLimit">��� (�������)</label>
-        <input asp-for="TimeLimit" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-primary">��������</button>
-    <a asp-action="Index" class="btn btn-secondary">�����</a>
-</form>
+</div>

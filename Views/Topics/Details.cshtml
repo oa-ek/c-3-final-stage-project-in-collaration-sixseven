@@ -1,5 +1,37 @@
 @model ZNOWay.Models.Topic
-@{ ViewData["Title"] = "����� ����"; }
-<h2>@Model.Name</h2>
-<p>�������: @Model.Subject?.Name</p>
-<a asp-action="Index" class="btn btn-secondary">�����</a>
+@{
+    ViewData["Title"] = "Деталі теми";
+    Layout = "_Layout";
+}
+
+<div class="container py-5">
+    <div style="max-width:600px; margin:0 auto">
+        <div class="card-zno">
+            <div style="display:flex; align-items:center; gap:14px; margin-bottom:24px">
+                <div style="width:50px; height:50px; border-radius:12px; background:rgba(162,89,255,.15); display:flex; align-items:center; justify-content:center">
+                    <i class="bi bi-tag" style="color:var(--clr-accent2); font-size:1.4rem"></i>
+                </div>
+                <div>
+                    <div style="font-size:.75rem; color:var(--clr-muted); text-transform:uppercase; letter-spacing:1px">Деталі теми</div>
+                    <div style="font-size:1.25rem; font-weight:700">@Model.Name</div>
+                </div>
+            </div>
+
+            <div style="background:var(--clr-surface); padding:16px; border-radius:12px; border:1px solid var(--clr-border); margin-bottom:24px">
+                <div style="display:flex; justify-content:space-between; margin-bottom:8px">
+                    <span style="color:var(--clr-muted)">Предмет:</span>
+                    <span style="font-weight:600; color:var(--clr-accent)">@Model.Subject?.Name</span>
+                </div>
+            </div>
+
+            <div style="display:flex; gap:10px">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-zno btn-primary-zno">
+                    <i class="bi bi-pencil"></i> Редагувати
+                </a>
+                <a asp-action="Index" class="btn-zno btn-ghost-zno">
+                    <i class="bi bi-arrow-left"></i> Назад
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

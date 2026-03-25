@@ -12,7 +12,6 @@
         display: flex;
         flex-direction: column;
     }
-
     .quiz-topbar {
         background: #fff;
         border-bottom: 1px solid #e2e8f0;
@@ -25,236 +24,90 @@
         z-index: 100;
         box-shadow: 0 2px 8px rgba(0,0,0,.06);
     }
-
-    .quiz-counter {
-        font-size: .8rem;
-        font-weight: 700;
-        color: #64748b;
-        white-space: nowrap;
-        flex-shrink: 0;
-    }
+    .quiz-counter { font-size: .8rem; font-weight: 700; color: #64748b; white-space: nowrap; flex-shrink: 0; }
     .quiz-counter span { color: #3a7bd5; }
-
-    .quiz-progress-wrap {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .progress-bar-wrap {
-        flex: 1;
-        height: 8px;
-        background: #e2e8f0;
-        border-radius: 99px;
-        overflow: hidden;
-    }
+    .quiz-progress-wrap { flex: 1; display: flex; align-items: center; gap: 12px; }
+    .progress-bar-wrap { flex: 1; height: 8px; background: #e2e8f0; border-radius: 99px; overflow: hidden; }
     .progress-bar-fill {
         height: 100%;
         background: linear-gradient(90deg, #3a7bd5, #27ae60);
         border-radius: 99px;
         transition: width .4s ease;
     }
-
-    .quiz-pct {
-        font-size: .78rem;
-        color: #64748b;
-        white-space: nowrap;
-        flex-shrink: 0;
-    }
-
+    .quiz-pct { font-size: .78rem; color: #64748b; white-space: nowrap; flex-shrink: 0; }
     .timer-pill {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 99px;
-        padding: 6px 16px;
-        font-size: .85rem;
-        font-weight: 700;
-        color: #1e293b;
-        transition: all .3s;
-        flex-shrink: 0;
+        display: flex; align-items: center; gap: 8px;
+        background: #f8fafc; border: 1px solid #e2e8f0;
+        border-radius: 99px; padding: 6px 16px;
+        font-size: .85rem; font-weight: 700; color: #1e293b;
+        transition: all .3s; flex-shrink: 0;
     }
-    .timer-pill.warning {
-        border-color: #f59e0b;
-        color: #f59e0b;
-        background: rgba(245,158,11,.08);
-    }
+    .timer-pill.warning { border-color: #f59e0b; color: #f59e0b; background: rgba(245,158,11,.08); }
     .timer-pill.danger {
-        border-color: #f43f5e;
-        color: #f43f5e;
+        border-color: #f43f5e; color: #f43f5e;
         background: rgba(244,63,94,.08);
         animation: timerPulse .6s ease infinite alternate;
     }
-
     @@keyframes timerPulse {
         from { box-shadow: none; }
         to   { box-shadow: 0 0 12px rgba(244,63,94,.4); }
     }
-
-    .quiz-content {
-        flex: 1;
-        display: flex;
-        align-items: flex-start;
-        justify-content: center;
-        padding: 40px 20px 60px;
-    }
-
+    .quiz-content { flex: 1; display: flex; align-items: flex-start; justify-content: center; padding: 40px 20px 60px; }
     .quiz-card {
-        background: #fff;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        width: 100%;
-        max-width: 720px;
-        overflow: hidden;
-        box-shadow: 0 4px 20px rgba(0,0,0,.06);
+        background: #fff; border: 1px solid #e2e8f0;
+        border-radius: 12px; width: 100%; max-width: 720px;
+        overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,.06);
     }
-
-    .quiz-question-body {
-        padding: 36px 40px 28px;
-        border-bottom: 1px solid #e2e8f0;
-    }
-
+    .quiz-question-body { padding: 36px 40px 28px; border-bottom: 1px solid #e2e8f0; }
     .quiz-type-label {
-        font-size: .72rem;
-        font-weight: 700;
-        letter-spacing: .1em;
-        text-transform: uppercase;
-        color: #3a7bd5;
-        margin-bottom: 16px;
-        display: flex;
-        align-items: center;
-        gap: 6px;
+        font-size: .72rem; font-weight: 700; letter-spacing: .1em;
+        text-transform: uppercase; color: #3a7bd5; margin-bottom: 16px;
+        display: flex; align-items: center; gap: 6px;
     }
-
-    .quiz-question-text {
-        font-size: 1.1rem;
-        font-weight: 600;
-        line-height: 1.65;
-        color: #1e293b;
-    }
-
-    .quiz-options {
-        padding: 24px 40px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
+    .quiz-question-text { font-size: 1.1rem; font-weight: 600; line-height: 1.65; color: #1e293b; }
+    .quiz-options { padding: 24px 40px; display: flex; flex-direction: column; gap: 10px; }
     .option-label {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        background: #f8fafc;
-        border: 1.5px solid #e2e8f0;
-        border-radius: 8px;
-        padding: 14px 18px;
-        cursor: pointer;
-        transition: all .18s ease;
-        position: relative;
-        user-select: none;
+        display: flex; align-items: center; gap: 16px;
+        background: #f8fafc; border: 1.5px solid #e2e8f0;
+        border-radius: 8px; padding: 14px 18px;
+        cursor: pointer; transition: all .18s ease;
+        position: relative; user-select: none;
     }
-    .option-label:hover {
-        border-color: #3a7bd5;
-        background: rgba(58,123,213,.06);
-    }
-    .option-label.selected {
-        border-color: #3a7bd5;
-        background: rgba(58,123,213,.1);
-    }
-
+    .option-label:hover { border-color: #3a7bd5; background: rgba(58,123,213,.06); }
+    .option-label.selected { border-color: #3a7bd5; background: rgba(58,123,213,.1); }
     .option-label input[type="radio"],
-    .option-label input[type="checkbox"] {
-        position: absolute;
-        opacity: 0;
-        width: 0; height: 0;
-    }
-
+    .option-label input[type="checkbox"] { position: absolute; opacity: 0; width: 0; height: 0; }
     .option-key {
-        width: 30px; height: 30px;
-        border-radius: 6px;
-        background: #fff;
-        border: 1px solid #e2e8f0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: .72rem;
-        font-weight: 700;
-        color: #64748b;
-        flex-shrink: 0;
-        transition: all .18s;
+        width: 30px; height: 30px; border-radius: 6px;
+        background: #fff; border: 1px solid #e2e8f0;
+        display: flex; align-items: center; justify-content: center;
+        font-size: .72rem; font-weight: 700; color: #64748b;
+        flex-shrink: 0; transition: all .18s;
     }
     .option-label:hover .option-key,
-    .option-label.selected .option-key {
-        background: #3a7bd5;
-        border-color: #3a7bd5;
-        color: #fff;
-    }
-
-    .option-text {
-        font-size: .925rem;
-        color: #1e293b;
-        line-height: 1.5;
-        flex: 1;
-    }
-
+    .option-label.selected .option-key { background: #3a7bd5; border-color: #3a7bd5; color: #fff; }
+    .option-text { font-size: .925rem; color: #1e293b; line-height: 1.5; flex: 1; }
     .quiz-footer {
-        padding: 20px 40px;
-        border-top: 1px solid #e2e8f0;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
+        padding: 20px 40px; border-top: 1px solid #e2e8f0;
+        display: flex; align-items: center; justify-content: space-between; gap: 12px;
     }
-
-    .quiz-hint {
-        font-size: .78rem;
-        color: #64748b;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-
+    .quiz-hint { font-size: .78rem; color: #64748b; display: flex; align-items: center; gap: 6px; }
     .key-hint {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 20px; height: 20px;
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 4px;
-        font-size: .65rem;
-        font-family: monospace;
-        color: #64748b;
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 20px; height: 20px; background: #f8fafc;
+        border: 1px solid #e2e8f0; border-radius: 4px;
+        font-size: .65rem; font-family: monospace; color: #64748b;
     }
-
     .btn-next {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        background: #3a7bd5;
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        padding: 12px 28px;
-        font-weight: 700;
-        font-size: .9rem;
-        cursor: pointer;
-        transition: all .18s;
+        display: inline-flex; align-items: center; gap: 10px;
+        background: #3a7bd5; color: #fff; border: none;
+        border-radius: 8px; padding: 12px 28px;
+        font-weight: 700; font-size: .9rem;
+        cursor: pointer; transition: all .18s;
     }
-    .btn-next:hover {
-        background: #2358a8;
-        transform: translateY(-1px);
-        box-shadow: 0 6px 20px rgba(58,123,213,.35);
-    }
+    .btn-next:hover { background: #2358a8; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(58,123,213,.35); }
     .btn-next.finish { background: #27ae60; }
-    .btn-next.finish:hover {
-        background: #1e8449;
-        box-shadow: 0 6px 20px rgba(39,174,96,.35);
-    }
-
+    .btn-next.finish:hover { background: #1e8449; box-shadow: 0 6px 20px rgba(39,174,96,.35); }
     @@media (max-width: 600px) {
         .quiz-topbar { padding: 12px 16px; }
         .quiz-question-body, .quiz-options, .quiz-footer { padding-left: 20px; padding-right: 20px; }
@@ -265,7 +118,6 @@
 
 <div class="quiz-wrap">
 
-    <!-- TOP BAR -->
     <div class="quiz-topbar">
         <div class="quiz-counter">
             Питання <span>@Model.CurrentNumber</span> / @Model.TotalQuestions
@@ -277,7 +129,6 @@
             </div>
             <span class="quiz-pct">@(Model.CurrentNumber * 100 / Model.TotalQuestions)%</span>
         </div>
-
         @if (timeLimit != null)
         {
             <div class="timer-pill" id="timerPill">
@@ -287,11 +138,8 @@
         }
     </div>
 
-    <!-- MAIN -->
     <div class="quiz-content">
         <div class="quiz-card">
-
-            <!-- QUESTION -->
             <div class="quiz-question-body">
                 <div class="quiz-type-label">
                     @if (Model.QuestionType == ZNOWay.Models.QuestionType.Multiple)
@@ -308,7 +156,6 @@
                 <div class="quiz-question-text">@Model.QuestionText</div>
             </div>
 
-            <!-- OPTIONS -->
             <form asp-action="Answer" method="post" id="quizForm">
                 @Html.AntiForgeryToken()
                 <input type="hidden" name="testId" value="@Model.TestId" />
@@ -333,7 +180,6 @@
                     }
                 </div>
 
-                <!-- FOOTER -->
                 <div class="quiz-footer">
                     <div class="quiz-hint">
                         <span class="key-hint">1</span>–<span class="key-hint">@(Math.Min(Model.Options.Count, 6))</span>
@@ -361,59 +207,49 @@
 </div>
 
 @section Scripts {
-<script>
-    // ── Highlight selected options ──
-    const labels = document.querySelectorAll('.option-label');
-    const isMultiple = @(Model.QuestionType == ZNOWay.Models.QuestionType.Multiple ? "true" : "false");
+    <script>
+        const labels = document.querySelectorAll('.option-label');
+        const isMultiple = @(Model.QuestionType == ZNOWay.Models.QuestionType.Multiple ? "true" : "false");
 
-    labels.forEach(label => {
-        const input = label.querySelector('input');
-        input.addEventListener('change', () => {
-            if (!isMultiple) {
-                labels.forEach(l => l.classList.remove('selected'));
-            }
-            if (input.checked) label.classList.add('selected');
-            else label.classList.remove('selected');
+        labels.forEach(label => {
+            const input = label.querySelector('input');
+            input.addEventListener('change', () => {
+                if (!isMultiple) labels.forEach(l => l.classList.remove('selected'));
+                if (input.checked) label.classList.add('selected');
+                else label.classList.remove('selected');
+            });
         });
-    });
 
-    // ── Keyboard shortcuts ──
-    const keyMap = { '1':'a','2':'b','3':'c','4':'d','5':'e','6':'f',
-                     'a':'a','b':'b','c':'c','d':'d','e':'e','f':'f' };
+        const keyMap = {'1':0,'2':1,'3':2,'4':3,'5':4,'6':5,
+                        'a':0,'b':1,'c':2,'d':3,'e':4,'f':5};
 
-    document.addEventListener('keydown', e => {
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-        const k = e.key.toLowerCase();
-        if (keyMap[k] !== undefined) {
-            const idx = 'abcdef'.indexOf(keyMap[k]);
-            if (idx < labels.length) labels[idx].click();
+        document.addEventListener('keydown', e => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            const k = e.key.toLowerCase();
+            if (keyMap[k] !== undefined && keyMap[k] < labels.length) labels[keyMap[k]].click();
+            if (e.key === 'Enter') document.getElementById('quizForm').submit();
+        });
+
+        var timeLimitSeconds = @(timeLimit.HasValue ? (timeLimit.Value * 60).ToString() : "0");
+
+        if (timeLimitSeconds > 0) {
+            var seconds = timeLimitSeconds;
+            var pill = document.getElementById('timerPill');
+            var timerText = document.getElementById('timerText');
+            var interval = setInterval(function() {
+                if (seconds <= 0) {
+                    clearInterval(interval);
+                    document.getElementById('quizForm').submit();
+                    return;
+                }
+                seconds--;
+                var m = Math.floor(seconds / 60);
+                var s = seconds % 60;
+                timerText.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+                pill.classList.remove('warning', 'danger');
+                if (seconds <= 30) pill.classList.add('danger');
+                else if (seconds <= 120) pill.classList.add('warning');
+            }, 1000);
         }
-        if (e.key === 'Enter') document.getElementById('quizForm').submit();
-    });
-
-    // ── Timer ──
-    @if (timeLimit != null)
-    {
-        <text>
-    var seconds = @(timeLimit * 60);
-    var pill = document.getElementById('timerPill');
-    var timerText = document.getElementById('timerText');
-
-    var interval = setInterval(function() {
-        if (seconds <= 0) {
-            clearInterval(interval);
-            document.getElementById('quizForm').submit();
-            return;
-        }
-        seconds--;
-        var m = Math.floor(seconds / 60);
-        var s = seconds % 60;
-        timerText.textContent = m + ':' + (s < 10 ? '0' : '') + s;
-        pill.classList.remove('warning', 'danger');
-        if (seconds <= 30) pill.classList.add('danger');
-        else if (seconds <= 120) pill.classList.add('warning');
-    }, 1000);
-        </text>
-    }
-</script>
+    </script>
 }

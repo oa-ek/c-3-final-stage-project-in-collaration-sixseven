@@ -5,11 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] — ZNOway</title>
 
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet" />
-    <!-- Bootstrap 5 -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet" />
-    <!-- Bootstrap Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
 
     <style>
@@ -33,7 +30,11 @@
             --transition: .2s ease;
         }
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         body {
             background: var(--clr-bg);
@@ -46,29 +47,36 @@
             flex-direction: column;
         }
 
-        /* ─── SCROLLBAR ─── */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--clr-bg); }
-        ::-webkit-scrollbar-thumb { background: var(--clr-border); border-radius: 99px; }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
 
-        /* ─── NAVBAR ─── */
+        ::-webkit-scrollbar-track {
+            background: var(--clr-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--clr-border);
+            border-radius: 99px;
+        }
+
         .zno-nav {
             position: sticky;
             top: 0;
             z-index: 1000;
             height: var(--nav-h);
-            background: rgba(13, 15, 20, .85);
+            background: rgba(13,15,20,.85);
             backdrop-filter: blur(18px);
             border-bottom: 1px solid var(--clr-border);
         }
 
-        .zno-nav .container-fluid {
-            height: 100%;
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            padding: 0 28px;
-        }
+            .zno-nav .container-fluid {
+                height: 100%;
+                display: flex;
+                align-items: center;
+                gap: 24px;
+                padding: 0 28px;
+            }
 
         .nav-logo {
             font-family: var(--font-display);
@@ -77,7 +85,9 @@
             letter-spacing: -.02em;
             text-decoration: none;
             background: linear-gradient(135deg, var(--clr-accent), var(--clr-accent2));
-
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             flex-shrink: 0;
         }
 
@@ -89,28 +99,27 @@
             flex: 1;
         }
 
-        .nav-links a {
-            color: var(--clr-muted);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: .875rem;
-            padding: 6px 14px;
-            border-radius: var(--radius-sm);
-            transition: color var(--transition), background var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 7px;
-        }
+            .nav-links a {
+                color: var(--clr-muted);
+                text-decoration: none;
+                font-weight: 500;
+                font-size: .875rem;
+                padding: 6px 14px;
+                border-radius: var(--radius-sm);
+                transition: color var(--transition), background var(--transition);
+                display: flex;
+                align-items: center;
+                gap: 7px;
+            }
 
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: var(--clr-text);
-            background: var(--clr-hover);
-        }
+                .nav-links a:hover, .nav-links a.active {
+                    color: var(--clr-text);
+                    background: var(--clr-hover);
+                }
 
-        .nav-links a.active {
-            color: var(--clr-accent);
-        }
+                .nav-links a.active {
+                    color: var(--clr-accent);
+                }
 
         .nav-actions {
             display: flex;
@@ -119,7 +128,6 @@
             margin-left: auto;
         }
 
-        /* ─── BUTTONS ─── */
         .btn-zno {
             display: inline-flex;
             align-items: center;
@@ -139,41 +147,48 @@
             background: var(--clr-accent);
             color: #fff;
         }
-        .btn-primary-zno:hover {
-            background: #3a77f5;
-            color: #fff;
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(79,138,255,.35);
-        }
+
+            .btn-primary-zno:hover {
+                background: #3a77f5;
+                color: #fff;
+                transform: translateY(-1px);
+                box-shadow: 0 6px 20px rgba(79,138,255,.35);
+            }
 
         .btn-ghost-zno {
             background: transparent;
             color: var(--clr-muted);
             border: 1px solid var(--clr-border);
         }
-        .btn-ghost-zno:hover {
-            background: var(--clr-hover);
-            color: var(--clr-text);
-            border-color: var(--clr-muted);
-        }
+
+            .btn-ghost-zno:hover {
+                background: var(--clr-hover);
+                color: var(--clr-text);
+                border-color: var(--clr-muted);
+            }
 
         .btn-success-zno {
             background: var(--clr-success);
             color: #fff;
         }
-        .btn-success-zno:hover {
-            background: #16a34a;
-            color: #fff;
-            transform: translateY(-1px);
-        }
 
-        /* ─── USER AVATAR ─── */
+            .btn-success-zno:hover {
+                background: #16a34a;
+                color: #fff;
+                transform: translateY(-1px);
+            }
+
         .user-avatar {
-            width: 36px; height: 36px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--clr-accent), var(--clr-accent2));
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: .8rem; color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: .8rem;
+            color: #fff;
             cursor: pointer;
             position: relative;
         }
@@ -192,10 +207,14 @@
         }
 
         .user-avatar:hover .user-dropdown,
-        .user-avatar:focus-within .user-dropdown { display: block; }
+        .user-avatar:focus-within .user-dropdown {
+            display: block;
+        }
 
         .user-dropdown a {
-            display: flex; align-items: center; gap: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
             padding: 9px 12px;
             color: var(--clr-muted);
             text-decoration: none;
@@ -203,10 +222,38 @@
             border-radius: var(--radius-sm);
             transition: all var(--transition);
         }
-        .user-dropdown a:hover { background: var(--clr-hover); color: var(--clr-text); }
-        .user-dropdown hr { border-color: var(--clr-border); margin: 6px 0; }
 
-        /* ─── HAMBURGER ─── */
+            .user-dropdown a:hover {
+                background: var(--clr-hover);
+                color: var(--clr-text);
+            }
+
+        .user-dropdown hr {
+            border-color: var(--clr-border);
+            margin: 6px 0;
+        }
+
+        /* Адмін-бейдж в навігації */
+        .nav-admin-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            background: rgba(162,89,255,.15);
+            color: var(--clr-accent2);
+            border-radius: 99px;
+            font-size: .8rem;
+            font-weight: 700;
+            text-decoration: none;
+            border: 1px solid rgba(162,89,255,.3);
+            transition: all var(--transition);
+        }
+
+            .nav-admin-badge:hover {
+                background: rgba(162,89,255,.25);
+                color: var(--clr-accent2);
+            }
+
         .hamburger {
             display: none;
             background: none;
@@ -227,26 +274,38 @@
             flex-direction: column;
             gap: 8px;
         }
-        .mobile-menu.open { display: flex; }
-        .mobile-menu a {
-            color: var(--clr-text);
-            text-decoration: none;
-            font-family: var(--font-display);
-            font-size: 1.3rem;
-            padding: 14px 0;
-            border-bottom: 1px solid var(--clr-border);
-            display: flex; align-items: center; gap: 12px;
-        }
+
+            .mobile-menu.open {
+                display: flex;
+            }
+
+            .mobile-menu a {
+                color: var(--clr-text);
+                text-decoration: none;
+                font-family: var(--font-display);
+                font-size: 1.3rem;
+                padding: 14px 0;
+                border-bottom: 1px solid var(--clr-border);
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
         .mobile-close {
-            position: absolute; top: 20px; right: 24px;
-            background: none; border: none;
-            color: var(--clr-muted); font-size: 1.6rem; cursor: pointer;
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            background: none;
+            border: none;
+            color: var(--clr-muted);
+            font-size: 1.6rem;
+            cursor: pointer;
         }
 
-        /* ─── MAIN ─── */
-        main { flex: 1; }
+        main {
+            flex: 1;
+        }
 
-        /* ─── CARDS ─── */
         .card-zno {
             background: var(--clr-card);
             border: 1px solid var(--clr-border);
@@ -254,36 +313,67 @@
             padding: 24px;
             transition: border-color var(--transition), transform var(--transition);
         }
-        .card-zno:hover {
-            border-color: rgba(79,138,255,.35);
-            transform: translateY(-2px);
-        }
 
-        /* ─── BADGE ─── */
+            .card-zno:hover {
+                border-color: rgba(79,138,255,.35);
+                transform: translateY(-2px);
+            }
+
         .badge-zno {
-            display: inline-flex; align-items: center; gap: 5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
             padding: 3px 10px;
             border-radius: 99px;
             font-size: .75rem;
             font-weight: 600;
         }
-        .badge-blue  { background: rgba(79,138,255,.15); color: var(--clr-accent); }
-        .badge-purple{ background: rgba(162,89,255,.15); color: var(--clr-accent2); }
-        .badge-green { background: rgba(34,197,94,.15);  color: var(--clr-success); }
-        .badge-amber { background: rgba(245,158,11,.15); color: var(--clr-warn); }
 
-        /* ─── ALERTS ─── */
+        .badge-blue {
+            background: rgba(79,138,255,.15);
+            color: var(--clr-accent);
+        }
+
+        .badge-purple {
+            background: rgba(162,89,255,.15);
+            color: var(--clr-accent2);
+        }
+
+        .badge-green {
+            background: rgba(34,197,94,.15);
+            color: var(--clr-success);
+        }
+
+        .badge-amber {
+            background: rgba(245,158,11,.15);
+            color: var(--clr-warn);
+        }
+
         .alert-zno {
             border-radius: var(--radius-sm);
             padding: 12px 18px;
             font-size: .875rem;
             border: 1px solid transparent;
         }
-        .alert-success-zno { background: rgba(34,197,94,.1); border-color: rgba(34,197,94,.3); color: var(--clr-success); }
-        .alert-error-zno   { background: rgba(239,68,68,.1);  border-color: rgba(239,68,68,.3);  color: #f87171; }
-        .alert-info-zno    { background: rgba(79,138,255,.1); border-color: rgba(79,138,255,.3); color: var(--clr-accent); }
 
-        /* ─── FORM CONTROLS ─── */
+        .alert-success-zno {
+            background: rgba(34,197,94,.1);
+            border-color: rgba(34,197,94,.3);
+            color: var(--clr-success);
+        }
+
+        .alert-error-zno {
+            background: rgba(239,68,68,.1);
+            border-color: rgba(239,68,68,.3);
+            color: #f87171;
+        }
+
+        .alert-info-zno {
+            background: rgba(79,138,255,.1);
+            border-color: rgba(79,138,255,.3);
+            color: var(--clr-accent);
+        }
+
         .form-control-zno {
             background: var(--clr-surface);
             border: 1px solid var(--clr-border);
@@ -293,22 +383,26 @@
             font-family: var(--font-body);
             font-size: .9rem;
             width: 100%;
-            transition: border-color var(--transition), box-shadow var(--transition);
             outline: none;
+            transition: border-color var(--transition), box-shadow var(--transition);
         }
-        .form-control-zno:focus {
-            border-color: var(--clr-accent);
-            box-shadow: 0 0 0 3px rgba(79,138,255,.2);
-        }
-        .form-control-zno::placeholder { color: var(--clr-muted); }
 
-        /* ─── PROGRESS BAR ─── */
+            .form-control-zno:focus {
+                border-color: var(--clr-accent);
+                box-shadow: 0 0 0 3px rgba(79,138,255,.2);
+            }
+
+            .form-control-zno::placeholder {
+                color: var(--clr-muted);
+            }
+
         .progress-zno {
             height: 6px;
             background: var(--clr-border);
             border-radius: 99px;
             overflow: hidden;
         }
+
         .progress-zno-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--clr-accent), var(--clr-accent2));
@@ -316,7 +410,6 @@
             transition: width .4s ease;
         }
 
-        /* ─── FOOTER ─── */
         .zno-footer {
             border-top: 1px solid var(--clr-border);
             padding: 28px;
@@ -326,58 +419,101 @@
             flex-wrap: wrap;
             gap: 12px;
         }
+
         .footer-logo {
             font-family: var(--font-display);
             font-weight: 900;
             font-size: .9rem;
             background: linear-gradient(135deg, var(--clr-accent), var(--clr-accent2));
-
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        .zno-footer p { color: var(--clr-muted); font-size: .8rem; }
-        .footer-links { display: flex; gap: 20px; }
-        .footer-links a { color: var(--clr-muted); font-size: .8rem; text-decoration: none; }
-        .footer-links a:hover { color: var(--clr-text); }
 
-        /* ─── TOAST ─── */
+        .zno-footer p {
+            color: var(--clr-muted);
+            font-size: .8rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+            .footer-links a {
+                color: var(--clr-muted);
+                font-size: .8rem;
+                text-decoration: none;
+            }
+
+                .footer-links a:hover {
+                    color: var(--clr-text);
+                }
+
         .toast-container-zno {
             position: fixed;
-            bottom: 24px; right: 24px;
+            bottom: 24px;
+            right: 24px;
             z-index: 9999;
-            display: flex; flex-direction: column; gap: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
+
         .toast-zno {
             background: var(--clr-card);
             border: 1px solid var(--clr-border);
             border-radius: var(--radius);
             padding: 14px 18px;
             min-width: 280px;
-            display: flex; align-items: center; gap: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
             box-shadow: 0 12px 40px rgba(0,0,0,.4);
             animation: slideUp .3s ease;
         }
+
         @@keyframes slideUp {
-            from { opacity: 0; transform: translateY(16px); }
-            to   { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        /* ─── PAGE HEADER ─── */
         .page-header {
             padding: 40px 0 32px;
             border-bottom: 1px solid var(--clr-border);
             margin-bottom: 32px;
         }
-        .page-header h1 {
-            font-family: var(--font-display);
-            font-size: 1.75rem;
-            font-weight: 700;
-        }
 
-        /* ─── RESPONSIVE ─── */
+            .page-header h1 {
+                font-family: var(--font-display);
+                font-size: 1.75rem;
+                font-weight: 700;
+            }
+
         @@media (max-width: 768px) {
-            .nav-links, .nav-actions .btn-zno:not(.user-avatar) { display: none; }
-            .hamburger { display: block; }
-            .zno-footer { flex-direction: column; text-align: center; }
-            .footer-links { justify-content: center; }
+            .nav-links, .nav-actions .btn-zno:not(.user-avatar) {
+                display: none;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .zno-footer {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-links {
+                justify-content: center;
+            }
         }
     </style>
 
@@ -385,158 +521,235 @@
 </head>
 <body>
 
-<!-- ═══ NAVBAR ═══ -->
-<nav class="zno-nav">
-    <div class="container-fluid">
-        <a href="/" class="nav-logo">ZNO<span style="opacity:.5">way</span></a>
+    <nav class="zno-nav">
+        <div class="container-fluid">
+            <a href="/" class="nav-logo">ZNOway</a>
 
-        <ul class="nav-links">
-            <li>
-                <a href="/Tests" class="@(ViewData['ActivePage']?.ToString() == "Tests" ? "active" : "")">
-                    <i class="bi bi-journal-text"></i> Тести
-                </a>
-            </li>
-            <li>
-                <a href="/Dashboard" class="@(ViewData['ActivePage']?.ToString() == "Dashboard" ? "active" : "")">
-                    <i class="bi bi-bar-chart-line"></i> Прогрес
-                </a>
-            </li>
-            <li>
-                <a href="/Favorites" class="@(ViewData['ActivePage']?.ToString() == "Favorites" ? "active" : "")">
-                    <i class="bi bi-bookmark"></i> Обране
-                </a>
-            </li>
-            <li>
-                <a href="/Mistakes" class="@(ViewData['ActivePage']?.ToString() == "Mistakes" ? "active" : "")">
-                    <i class="bi bi-x-circle"></i> Помилки
-                </a>
-            </li>
+            <ul class="nav-links">
+                @if (User.Identity != null && User.Identity.IsAuthenticated)
+                {
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li>
+                            <a asp-controller="Admin" asp-action="Index"
+                               class="@(ViewData["ActivePage"]?.ToString() == "Admin" ? "active" : "")">
+                                <i class="bi bi-house"></i> Панель
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Subjects" asp-action="Index"
+                               class="@(ViewData["ActivePage"]?.ToString() == "Subjects" ? "active" : "")">
+                                <i class="bi bi-book"></i> Предмети
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Tests" asp-action="Index"
+                               class="@(ViewData["ActivePage"]?.ToString() == "Tests" ? "active" : "")">
+                                <i class="bi bi-journal-text"></i> Тести
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Questions" asp-action="Index"
+                               class="@(ViewData["ActivePage"]?.ToString() == "Questions" ? "active" : "")">
+                                <i class="bi bi-question-circle"></i> Питання
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Users" asp-action="Index"
+                               class="@(ViewData["ActivePage"]?.ToString() == "Users" ? "active" : "")">
+                                <i class="bi bi-people"></i> Користувачі
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="UserResults" asp-action="Index"
+                               class="@(ViewData["ActivePage"]?.ToString() == "Results" ? "active" : "")">
+                                <i class="bi bi-bar-chart-line"></i> Результати
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a asp-controller="Dashboard" asp-action="Index"
+                               class="@(ViewData["ActivePage"]?.ToString() == "Home" ? "active" : "")">
+                                <i class="bi bi-house"></i> Головна
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Tests" asp-action="Index"
+                               class="@(ViewData["ActivePage"]?.ToString() == "Tests" ? "active" : "")">
+                                <i class="bi bi-journal-text"></i> Тести
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Subjects" asp-action="Index"
+                               class="@(ViewData["ActivePage"]?.ToString() == "Subjects" ? "active" : "")">
+                                <i class="bi bi-book"></i> Предмети
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="UserResults" asp-action="Index"
+                               class="@(ViewData["ActivePage"]?.ToString() == "Results" ? "active" : "")">
+                                <i class="bi bi-bar-chart-line"></i> Результати
+                            </a>
+                        </li>
+                    }
+                }
+            </ul>
+
+            <div class="nav-actions">
+                @if (User.Identity != null && User.Identity.IsAuthenticated)
+                {
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-controller="Admin" asp-action="Index" class="nav-admin-badge">
+                            <i class="bi bi-shield-check"></i> Адмін
+                        </a>
+                    }
+                    <div class="user-avatar" tabindex="0">
+                        @User.Identity.Name?.Substring(0, 1).ToUpper()
+                        <div class="user-dropdown">
+                            <div style="padding:8px 12px 6px; font-size:.75rem; color:var(--clr-muted)">
+                                @User.Identity.Name
+                            </div>
+                            <hr />
+                            <a asp-controller="UserResults" asp-action="Index">
+                                <i class="bi bi-bar-chart-line"></i> Мої результати
+                            </a>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a asp-controller="Admin" asp-action="Index">
+                                    <i class="bi bi-shield-check"></i> Адмін-панель
+                                </a>
+                            }
+                            <hr />
+                            <a asp-controller="Account" asp-action="Logout" style="color:#f87171">
+                                <i class="bi bi-box-arrow-right"></i> Вийти
+                            </a>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login" class="btn-zno btn-ghost-zno">
+                        Увійти
+                    </a>
+                    <a asp-controller="Account" asp-action="Register" class="btn-zno btn-primary-zno">
+                        <i class="bi bi-person-plus"></i> Реєстрація
+                    </a>
+                }
+                <button class="hamburger" id="hamburgerBtn"><i class="bi bi-list"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Мобільне меню -->
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="mobile-close" id="mobileClose"><i class="bi bi-x"></i></button>
+        @if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
             @if (User.IsInRole("Admin"))
             {
-                <li>
-                    <a href="/Admin" class="@(ViewData['ActivePage']?.ToString() == "Admin" ? "active" : "")">
-                        <i class="bi bi-shield-check"></i> Адмін
-                    </a>
-                </li>
-            }
-        </ul>
-
-        <div class="nav-actions">
-            @if (User.Identity?.IsAuthenticated == true)
-            {
-                <div class="user-avatar" tabindex="0">
-                    @User.Identity.Name?.Substring(0, 1).ToUpper()
-                    <div class="user-dropdown">
-                        <a href="/Dashboard"><i class="bi bi-person"></i> Мій кабінет</a>
-                        <a href="/Account/Settings"><i class="bi bi-gear"></i> Налаштування</a>
-                        <hr />
-                        <a href="/Account/Logout" style="color:#f87171"><i class="bi bi-box-arrow-right"></i> Вийти</a>
-                    </div>
-                </div>
+                <a asp-controller="Admin" asp-action="Index"><i class="bi bi-house"></i> Панель</a>
+                <a asp-controller="Subjects" asp-action="Index"><i class="bi bi-book"></i> Предмети</a>
+                <a asp-controller="Tests" asp-action="Index"><i class="bi bi-journal-text"></i> Тести</a>
+                <a asp-controller="Questions" asp-action="Index"><i class="bi bi-question-circle"></i> Питання</a>
+                <a asp-controller="Users" asp-action="Index"><i class="bi bi-people"></i> Користувачі</a>
+                <a asp-controller="UserResults" asp-action="Index"><i class="bi bi-bar-chart-line"></i> Результати</a>
             }
             else
             {
-                <a href="/Account/Login" class="btn-zno btn-ghost-zno">Увійти</a>
-                <a href="/Account/Register" class="btn-zno btn-primary-zno">
-                    <i class="bi bi-person-plus"></i> Реєстрація
-                </a>
+                <a asp-controller="Dashboard" asp-action="Index"><i class="bi bi-house"></i> Головна</a>
+                <a asp-controller="Tests" asp-action="Index"><i class="bi bi-journal-text"></i> Тести</a>
+                <a asp-controller="Subjects" asp-action="Index"><i class="bi bi-book"></i> Предмети</a>
+                <a asp-controller="UserResults" asp-action="Index"><i class="bi bi-bar-chart-line"></i> Результати</a>
             }
-            <button class="hamburger" id="hamburgerBtn"><i class="bi bi-list"></i></button>
-        </div>
+            <div style="margin-top:auto">
+                <a asp-controller="Account" asp-action="Logout" style="color:#f87171">
+                    <i class="bi bi-box-arrow-right"></i> Вийти
+                </a>
+            </div>
+        }
+        else
+        {
+            <div style="margin-top:auto; display:flex; flex-direction:column; gap:10px;">
+                <a asp-controller="Account" asp-action="Login" class="btn-zno btn-ghost-zno" style="justify-content:center">Увійти</a>
+                <a asp-controller="Account" asp-action="Register" class="btn-zno btn-primary-zno" style="justify-content:center">Реєстрація</a>
+            </div>
+        }
     </div>
-</nav>
 
-<!-- ═══ MOBILE MENU ═══ -->
-<div class="mobile-menu" id="mobileMenu">
-    <button class="mobile-close" id="mobileClose"><i class="bi bi-x"></i></button>
-    <a href="/Tests"><i class="bi bi-journal-text"></i> Тести</a>
-    <a href="/Dashboard"><i class="bi bi-bar-chart-line"></i> Прогрес</a>
-    <a href="/Favorites"><i class="bi bi-bookmark"></i> Обране</a>
-    <a href="/Mistakes"><i class="bi bi-x-circle"></i> Помилки</a>
-    @if (User.IsInRole("Admin"))
+    @if (TempData["Success"] != null)
     {
-        <a href="/Admin"><i class="bi bi-shield-check"></i> Адмін</a>
+        <div class="container mt-3">
+            <div class="alert-zno alert-success-zno">
+                <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+            </div>
+        </div>
     }
-    <div style="margin-top:auto; display:flex; flex-direction:column; gap:10px;">
-        <a href="/Account/Login" class="btn-zno btn-ghost-zno" style="justify-content:center">Увійти</a>
-        <a href="/Account/Register" class="btn-zno btn-primary-zno" style="justify-content:center">Реєстрація</a>
-    </div>
-</div>
-
-<!-- ═══ ALERTS (TempData) ═══ -->
-@if (TempData["Success"] != null)
-{
-    <div class="container mt-3">
-        <div class="alert-zno alert-success-zno">
-            <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+    @if (TempData["Error"] != null)
+    {
+        <div class="container mt-3">
+            <div class="alert-zno alert-error-zno">
+                <i class="bi bi-exclamation-circle me-2"></i>@TempData["Error"]
+            </div>
         </div>
-    </div>
-}
-@if (TempData["Error"] != null)
-{
-    <div class="container mt-3">
-        <div class="alert-zno alert-error-zno">
-            <i class="bi bi-exclamation-circle me-2"></i>@TempData["Error"]
-        </div>
-    </div>
-}
-
-<!-- ═══ MAIN CONTENT ═══ -->
-<main>
-    @RenderBody()
-</main>
-
-<!-- ═══ FOOTER ═══ -->
-<footer class="zno-footer">
-    <div>
-        <div class="footer-logo">ZNOway</div>
-        <p style="margin-top:4px">Платформа для підготовки до ЗНО/НМТ</p>
-    </div>
-    <nav class="footer-links">
-        <a href="/Tests">Тести</a>
-        <a href="/Dashboard">Прогрес</a>
-        <a href="/Account/Register">Реєстрація</a>
-    </nav>
-    <p>&copy; @DateTime.Now.Year ZNOway. Всі права захищені.</p>
-</footer>
-
-<!-- ═══ TOAST CONTAINER ═══ -->
-<div class="toast-container-zno" id="toastContainer"></div>
-
-<!-- Bootstrap JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-
-<script>
-    // Mobile menu
-    const hamburger = document.getElementById('hamburgerBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const mobileClose = document.getElementById('mobileClose');
-
-    hamburger?.addEventListener('click', () => mobileMenu.classList.add('open'));
-    mobileClose?.addEventListener('click', () => mobileMenu.classList.remove('open'));
-
-    // Toast helper — use: showToast('Збережено!', 'success')
-    function showToast(message, type = 'info') {
-        const icons = { success: 'bi-check-circle', error: 'bi-x-circle', info: 'bi-info-circle' };
-        const colors = { success: '#22c55e', error: '#f87171', info: '#4f8aff' };
-        const container = document.getElementById('toastContainer');
-        const toast = document.createElement('div');
-        toast.className = 'toast-zno';
-        toast.innerHTML = `
-            <i class="bi ${icons[type]}" style="color:${colors[type]};font-size:1.2rem;flex-shrink:0"></i>
-            <span style="flex:1">${message}</span>
-            <button onclick="this.parentElement.remove()" style="background:none;border:none;color:var(--clr-muted);cursor:pointer;font-size:1.1rem"><i class="bi bi-x"></i></button>
-        `;
-        container.appendChild(toast);
-        setTimeout(() => toast.remove(), 4000);
     }
 
-    // Active nav highlight based on current path
-    document.querySelectorAll('.nav-links a').forEach(link => {
-        if (link.href === window.location.href) link.classList.add('active');
-    });
-</script>
+    <main>
+        @RenderBody()
+    </main>
 
-@await RenderSectionAsync("Scripts", required: false)
+    <footer class="zno-footer">
+        <div>
+            <div class="footer-logo">ZNOway</div>
+            <p style="margin-top:4px">Платформа для підготовки до ЗНО/НМТ</p>
+        </div>
+        <nav class="footer-links">
+            <a asp-controller="Tests" asp-action="Index">Тести</a>
+            <a asp-controller="Subjects" asp-action="Index">Предмети</a>
+            @if (User.Identity == null || !User.Identity.IsAuthenticated)
+            {
+                <a asp-controller="Account" asp-action="Register">Реєстрація</a>
+            }
+        </nav>
+        <p>&copy; @DateTime.Now.Year ZNOway. Всі права захищені.</p>
+    </footer>
+
+    <div class="toast-container-zno" id="toastContainer"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const hamburger = document.getElementById('hamburgerBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileClose = document.getElementById('mobileClose');
+
+        hamburger?.addEventListener('click', () => mobileMenu.classList.add('open'));
+        mobileClose?.addEventListener('click', () => mobileMenu.classList.remove('open'));
+
+        function showToast(message, type = 'info') {
+            const icons  = { success: 'bi-check-circle', error: 'bi-x-circle', info: 'bi-info-circle' };
+            const colors = { success: '#22c55e', error: '#f87171', info: '#4f8aff' };
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast-zno';
+            toast.innerHTML = `
+                <i class="bi ${icons[type]}" style="color:${colors[type]};font-size:1.2rem;flex-shrink:0"></i>
+                <span style="flex:1">${message}</span>
+                <button onclick="this.parentElement.remove()"
+                    style="background:none;border:none;color:var(--clr-muted);cursor:pointer;font-size:1.1rem">
+                    <i class="bi bi-x"></i>
+                </button>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+
+        // Підсвічування активного пункту меню
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            if (link.href === window.location.href) link.classList.add('active');
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

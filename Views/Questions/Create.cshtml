@@ -1,23 +1,44 @@
 @model ZNOWay.Models.Question
-@{ ViewData["Title"] = "�������� �������"; }
-<h2>�������� �������</h2>
-<form asp-action="Create">
-    <div class="form-group mb-3">
-        <label asp-for="Text">����� �������</label>
-        <textarea asp-for="Text" class="form-control"></textarea>
+@{
+    ViewData["Title"] = "Додати питання";
+    Layout = "_Layout";
+}
+
+<div class="container py-5">
+    <div style="max-width:700px; margin:0 auto">
+        <div class="page-header">
+            <h1><i class="bi bi-plus-circle me-2" style="color:var(--clr-warn)"></i>Додати питання</h1>
+        </div>
+        <div class="card-zno">
+            <form asp-action="Create">
+                <div style="margin-bottom:20px">
+                    <label style="display:block; margin-bottom:8px; color:var(--clr-muted); font-size:.85rem;">Виберіть тест</label>
+                    <select asp-for="TestId" class="form-control-zno" asp-items="ViewBag.TestId"
+                            style="background: var(--clr-surface); color: white; border: 1px solid var(--clr-border); padding: 10px; width: 100%; border-radius: 8px;">
+                    </select>
+                </div>
+
+                <div style="margin-bottom:20px">
+                    <label style="display:block; margin-bottom:8px; color:var(--clr-muted); font-size:.85rem;">Текст питання</label>
+                    <textarea asp-for="Text" class="form-control-zno" rows="4" placeholder="Напишіть умову питання тут..."
+                              style="background: var(--clr-surface); color: white; border: 1px solid var(--clr-border); padding: 12px; width: 100%; border-radius: 8px;"></textarea>
+                    <span asp-validation-for="Text" style="color:#f87171; font-size:.8rem"></span>
+                </div>
+
+                <div style="margin-bottom:25px">
+                    <label style="display:block; margin-bottom:8px; color:var(--clr-muted); font-size:.85rem;">Тип питання (напр. "Одна відповідь")</label>
+                    <input asp-for="Type" class="form-control-zno" placeholder="Введіть тип..."
+                           style="background: var(--clr-surface); color: white; border: 1px solid var(--clr-border); padding: 10px; width: 100%; border-radius: 8px;" />
+                    <span asp-validation-for="Type" style="color:#f87171; font-size:.8rem"></span>
+                </div>
+
+                <div style="display:flex; gap:12px">
+                    <button type="submit" class="btn-zno btn-primary-zno">
+                        <i class="bi bi-save me-2"></i> Зберегти питання
+                    </button>
+                    <a asp-action="Index" class="btn-zno btn-ghost-zno">Назад до списку</a>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="form-group mb-3">
-        <label asp-for="Type">���</label>
-        <select asp-for="Type" class="form-control">
-            <option value="0">Single</option>
-            <option value="1">Multiple</option>
-            <option value="2">Open</option>
-        </select>
-    </div>
-    <div class="form-group mb-3">
-        <label asp-for="TestId">����</label>
-        <select asp-for="TestId" asp-items="ViewBag.Tests" class="form-control"></select>
-    </div>
-    <button type="submit" class="btn btn-primary">��������</button>
-    <a asp-action="Index" class="btn btn-secondary">�����</a>
-</form>
+</div>
