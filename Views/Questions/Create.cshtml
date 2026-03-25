@@ -1,0 +1,23 @@
+@model ZNOWay.Models.Question
+@{ ViewData["Title"] = "�������� �������"; }
+<h2>�������� �������</h2>
+<form asp-action="Create">
+    <div class="form-group mb-3">
+        <label asp-for="Text">����� �������</label>
+        <textarea asp-for="Text" class="form-control"></textarea>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="Type">���</label>
+        <select asp-for="Type" class="form-control">
+            <option value="0">Single</option>
+            <option value="1">Multiple</option>
+            <option value="2">Open</option>
+        </select>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="TestId">����</label>
+        <select asp-for="TestId" asp-items="ViewBag.Tests" class="form-control"></select>
+    </div>
+    <button type="submit" class="btn btn-primary">��������</button>
+    <a asp-action="Index" class="btn btn-secondary">�����</a>
+</form>

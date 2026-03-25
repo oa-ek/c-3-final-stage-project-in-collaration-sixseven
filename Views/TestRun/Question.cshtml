@@ -1,0 +1,429 @@
+@model ZNOWay.ViewModels.QuestionViewModel
+@{
+    ViewData["Title"] = "Питання " + Model.CurrentNumber;
+    Layout = "_Layout";
+}
+
+@section Styles {
+<style>
+    /* ─── QUIZ LAYOUT ─── */
+    .quiz-wrap {
+        min-height: calc(100vh - var(--nav-h));
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* ─── TOP BAR ─── */
+    .quiz-topbar {
+        background: var(--clr-surface);
+        border-bottom: 1px solid var(--clr-border);
+        padding: 14px 28px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        position: sticky;
+        top: var(--nav-h);
+        z-index: 100;
+    }
+
+    .quiz-counter {
+        font-family: var(--font-display);
+        font-size: .8rem;
+        font-weight: 700;
+        color: var(--clr-muted);
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    .quiz-counter span {
+        color: var(--clr-accent);
+    }
+
+    .quiz-progress-wrap {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .progress-zno { flex: 1; }
+
+    .quiz-pct {
+        font-size: .78rem;
+        color: var(--clr-muted);
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    /* ─── TIMER ─── */
+    .timer-pill {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--clr-card);
+        border: 1px solid var(--clr-border);
+        border-radius: 99px;
+        padding: 6px 16px;
+        font-family: var(--font-display);
+        font-size: .85rem;
+        font-weight: 700;
+        color: var(--clr-text);
+        transition: all .3s;
+        flex-shrink: 0;
+    }
+    .timer-pill.warning {
+        border-color: var(--clr-warn);
+        color: var(--clr-warn);
+        background: rgba(245,158,11,.08);
+    }
+    .timer-pill.danger {
+        border-color: #f43f5e;
+        color: #f43f5e;
+        background: rgba(244,63,94,.08);
+        animation: timerPulse .6s ease infinite alternate;
+    }
+    @keyframes timerPulse {
+        from { box-shadow: none; }
+        to   { box-shadow: 0 0 12px rgba(244,63,94,.4); }
+    }
+
+    /* ─── MAIN CONTENT ─── */
+    .quiz-content {
+        flex: 1;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 40px 20px 60px;
+    }
+
+    .quiz-card {
+        background: var(--clr-card);
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius);
+        width: 100%;
+        max-width: 720px;
+        overflow: hidden;
+    }
+
+    .quiz-question-body {
+        padding: 36px 40px 28px;
+        border-bottom: 1px solid var(--clr-border);
+    }
+
+    .quiz-type-label {
+        font-size: .72rem;
+        font-weight: 700;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        color: var(--clr-accent);
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .quiz-question-text {
+        font-size: 1.1rem;
+        font-weight: 600;
+        line-height: 1.65;
+        color: var(--clr-text);
+    }
+
+    /* ─── OPTIONS ─── */
+    .quiz-options {
+        padding: 24px 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .option-label {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        background: var(--clr-surface);
+        border: 1.5px solid var(--clr-border);
+        border-radius: var(--radius-sm);
+        padding: 14px 18px;
+        cursor: pointer;
+        transition: all .18s ease;
+        position: relative;
+        user-select: none;
+    }
+
+    .option-label:hover {
+        border-color: var(--clr-accent);
+        background: rgba(79,138,255,.06);
+    }
+
+    .option-label.selected {
+        border-color: var(--clr-accent);
+        background: rgba(79,138,255,.1);
+    }
+
+    /* hide native input */
+    .option-label input[type="radio"],
+    .option-label input[type="checkbox"] {
+        position: absolute;
+        opacity: 0;
+        width: 0; height: 0;
+    }
+
+    .option-key {
+        width: 30px;
+        height: 30px;
+        border-radius: 6px;
+        background: var(--clr-card);
+        border: 1px solid var(--clr-border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-display);
+        font-size: .72rem;
+        font-weight: 700;
+        color: var(--clr-muted);
+        flex-shrink: 0;
+        transition: all .18s;
+    }
+
+    .option-label:hover .option-key,
+    .option-label.selected .option-key {
+        background: var(--clr-accent);
+        border-color: var(--clr-accent);
+        color: #fff;
+    }
+
+    .option-text {
+        font-size: .925rem;
+        color: var(--clr-text);
+        line-height: 1.5;
+        flex: 1;
+    }
+
+    /* ─── FOOTER ─── */
+    .quiz-footer {
+        padding: 20px 40px;
+        border-top: 1px solid var(--clr-border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .quiz-hint {
+        font-size: .78rem;
+        color: var(--clr-muted);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .key-hint {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px; height: 20px;
+        background: var(--clr-surface);
+        border: 1px solid var(--clr-border);
+        border-radius: 4px;
+        font-size: .65rem;
+        font-family: monospace;
+        color: var(--clr-muted);
+    }
+
+    .btn-next {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--clr-accent);
+        color: #fff;
+        border: none;
+        border-radius: var(--radius-sm);
+        padding: 12px 28px;
+        font-family: var(--font-body);
+        font-weight: 700;
+        font-size: .9rem;
+        cursor: pointer;
+        transition: all .18s;
+    }
+    .btn-next:hover {
+        background: #3a77f5;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(79,138,255,.35);
+    }
+    .btn-next.finish {
+        background: var(--clr-success);
+    }
+    .btn-next.finish:hover {
+        background: #16a34a;
+        box-shadow: 0 6px 20px rgba(34,197,94,.35);
+    }
+
+    @@media (max-width: 600px) {
+        .quiz-topbar { padding: 12px 16px; }
+        .quiz-question-body, .quiz-options, .quiz-footer { padding-left: 20px; padding-right: 20px; }
+        .quiz-hint { display: none; }
+        .quiz-topbar .quiz-counter { font-size: .72rem; }
+    }
+</style>
+}
+
+<div class="quiz-wrap">
+
+    <!-- TOP BAR -->
+    <div class="quiz-topbar">
+        <div class="quiz-counter">
+            Питання <span>@Model.CurrentNumber</span> / @Model.TotalQuestions
+        </div>
+        <div class="quiz-progress-wrap">
+            <div class="progress-zno">
+                <div class="progress-zno-fill" id="progressFill"
+                     style="width:@(Model.CurrentNumber * 100 / Model.TotalQuestions)%"></div>
+            </div>
+            <span class="quiz-pct">@(Model.CurrentNumber * 100 / Model.TotalQuestions)%</span>
+        </div>
+
+        @{
+            var timeLimit = Context.Session.GetInt32($"timelimit_{Model.TestId}");
+        }
+        @if (timeLimit != null)
+        {
+            <div class="timer-pill" id="timerPill">
+                <i class="bi bi-clock"></i>
+                <span id="timerText">@timeLimit:00</span>
+            </div>
+        }
+    </div>
+
+    <!-- MAIN -->
+    <div class="quiz-content">
+        <div class="quiz-card">
+
+            <!-- QUESTION -->
+            <div class="quiz-question-body">
+                <div class="quiz-type-label">
+                    @if (Model.QuestionType == ZNOWay.Models.QuestionType.Multiple)
+                    {
+                        <i class="bi bi-check2-square"></i> <span>Декілька правильних відповідей</span>
+                    }
+                    else
+                    {
+                        <i class="bi bi-record-circle"></i> <span>Одна правильна відповідь</span>
+                    }
+                </div>
+                <div class="quiz-question-text">@Model.QuestionText</div>
+            </div>
+
+            <!-- OPTIONS -->
+            <form asp-action="Answer" method="post" id="quizForm">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="testId" value="@Model.TestId" />
+                <input type="hidden" name="questionId" value="@Model.QuestionId" />
+                <input type="hidden" name="questionIndex" value="@Model.CurrentNumber" />
+
+                <div class="quiz-options" id="optionsList">
+                    @{var keys = new[] {"A","B","C","D","E","F"};}
+                    @for (int i = 0; i < Model.Options.Count; i++)
+                    {
+                        var option = Model.Options[i];
+                        var key = i < keys.Length ? keys[i] : (i+1).ToString();
+                        var inputType = Model.QuestionType == ZNOWay.Models.QuestionType.Multiple ? "checkbox" : "radio";
+                        <label class="option-label" for="opt_@option.Id" data-index="@i">
+                            <input type="@inputType"
+                                   name="selectedOptions"
+                                   value="@option.Id"
+                                   id="opt_@option.Id" />
+                            <span class="option-key">@key</span>
+                            <span class="option-text">@option.Text</span>
+                        </label>
+                    }
+                </div>
+
+                <!-- FOOTER -->
+                <div class="quiz-footer">
+                    <div class="quiz-hint">
+                        <span class="key-hint">1</span>–<span class="key-hint">@(Math.Min(Model.Options.Count, 6))</span>
+                        <span style="margin-left:4px">клавіші для вибору</span>
+                        &nbsp;·&nbsp;
+                        <span class="key-hint">↵</span>
+                        <span style="margin-left:4px">далі</span>
+                    </div>
+                    <button type="submit" class="btn-next @(Model.CurrentNumber == Model.TotalQuestions ? "finish" : "")">
+                        @if (Model.CurrentNumber == Model.TotalQuestions)
+                        {
+                            <i class="bi bi-flag-fill"></i> <span>Завершити тест</span>
+                        }
+                        else
+                        {
+                            <span>Наступне питання</span> <i class="bi bi-arrow-right"></i>
+                        }
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    // ── Highlight selected options ──
+    const labels = document.querySelectorAll('.option-label');
+    const isMultiple = @(Model.QuestionType == ZNOWay.Models.QuestionType.Multiple ? "true" : "false");
+
+    labels.forEach(label => {
+        const input = label.querySelector('input');
+        input.addEventListener('change', () => {
+            if (!isMultiple) {
+                labels.forEach(l => l.classList.remove('selected'));
+            }
+            if (input.checked) label.classList.add('selected');
+            else label.classList.remove('selected');
+        });
+    });
+
+    // ── Keyboard shortcuts (A-F or 1-6, Enter to submit) ──
+    const keyMap = { '1':'a', '2':'b', '3':'c', '4':'d', '5':'e', '6':'f',
+                     'a':'a', 'b':'b', 'c':'c', 'd':'d', 'e':'e', 'f':'f' };
+
+    document.addEventListener('keydown', e => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+        const k = e.key.toLowerCase();
+        if (keyMap[k] !== undefined) {
+            const idx = 'abcdef'.indexOf(keyMap[k]);
+            if (idx < labels.length) {
+                labels[idx].click();
+            }
+        }
+        if (e.key === 'Enter') {
+            document.getElementById('quizForm').submit();
+        }
+    });
+
+    // ── Timer ──
+    @if (timeLimit != null)
+    {
+        <text>
+    var seconds = @(timeLimit * 60);
+    var pill = document.getElementById('timerPill');
+    var timerText = document.getElementById('timerText');
+
+    var interval = setInterval(function() {
+        if (seconds <= 0) {
+            clearInterval(interval);
+            document.getElementById('quizForm').submit();
+            return;
+        }
+        seconds--;
+        var m = Math.floor(seconds / 60);
+        var s = seconds % 60;
+        timerText.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+
+        // color states
+        pill.classList.remove('warning','danger');
+        if (seconds <= 30) pill.classList.add('danger');
+        else if (seconds <= 120) pill.classList.add('warning');
+    }, 1000);
+        </text>
+    }
+</script>
+}

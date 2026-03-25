@@ -1,0 +1,147 @@
+@model IEnumerable<ZNOWay.Models.Topic>
+@{
+    ViewData["Title"] = "Теми";
+}
+
+<style>
+    .topics-wrap { padding: 36px 0 60px; }
+    .topics-table-wrap {
+        background: var(--clr-card); border: 1px solid var(--clr-border);
+        border-radius: var(--radius); overflow: hidden;
+    }
+    .topics-table { width: 100%; border-collapse: collapse; }
+    .topics-table thead tr { background: var(--clr-surface); border-bottom: 1px solid var(--clr-border); }
+    .topics-table thead th {
+        padding: 14px 20px; font-size: .75rem; font-weight: 700;
+        color: var(--clr-muted); text-transform: uppercase; letter-spacing: .07em; text-align: left;
+    }
+    .topics-table tbody tr { border-bottom: 1px solid var(--clr-border); transition: background .15s; }
+    .topics-table tbody tr:last-child { border-bottom: none; }
+    .topics-table tbody tr:hover { background: rgba(255,255,255,.03); }
+    .topics-table tbody td { padding: 14px 20px; font-size: .9rem; vertical-align: middle; }
+
+    .topic-cell { display: flex; align-items: center; gap: 10px; }
+    .topic-icon {
+        width: 34px; height: 34px; border-radius: var(--radius-sm); flex-shrink: 0;
+        background: rgba(162,89,255,.12); border: 1px solid rgba(162,89,255,.2);
+        display: flex; align-items: center; justify-content: center;
+        color: var(--clr-accent2); font-size: .9rem;
+    }
+    .subject-badge {
+        display: inline-flex; align-items: center; gap: 5px;
+        padding: 3px 10px; border-radius: 99px; font-size: .75rem; font-weight: 600;
+        background: rgba(79,138,255,.1); border: 1px solid rgba(79,138,255,.2); color: var(--clr-accent);
+    }
+    .action-cell { display: flex; gap: 6px; }
+    .btn-tbl {
+        width: 32px; height: 32px; border-radius: var(--radius-sm);
+        display: inline-flex; align-items: center; justify-content: center;
+        border: 1px solid var(--clr-border); background: var(--clr-surface);
+        color: var(--clr-muted); text-decoration: none; font-size: .82rem; transition: all .15s;
+    }
+    .btn-tbl:hover { color: var(--clr-accent); border-color: var(--clr-accent); }
+    .btn-tbl.danger:hover { color: #f87171; border-color: #f87171; }
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--clr-muted); }
+    .empty-state i { font-size: 2.5rem; display: block; margin-bottom: 12px; opacity: .4; }
+
+    /* Search */
+    .search-wrap { position: relative; max-width: 300px; }
+    .search-wrap i { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--clr-muted); pointer-events: none; }
+    .search-wrap input { padding-left: 38px; }
+</style>
+
+<div class="topics-wrap">
+<div class="container">
+
+    <div class="page-header d-flex align-items-start justify-content-between flex-wrap gap-3 mb-4">
+        <div>
+            <h1><i class="bi bi-collection me-2" style="color:var(--clr-accent)"></i>Теми</h1>
+            <p style="color:var(--clr-muted);margin-top:6px">Управління темами за предметами</p>
+        </div>
+        <a asp-action="Create" class="btn-zno d-flex align-items-center gap-2">
+            <i class="bi bi-plus-lg"></i> Додати тему
+        </a>
+    </div>
+
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
+        <div class="search-wrap">
+            <i class="bi bi-search"></i>
+            <input type="text" class="form-control-zno" id="searchInput"
+                   placeholder="Пошук теми..." oninput="filterTopics()" />
+        </div>
+        <span style="color:var(--clr-muted);font-size:.875rem">
+            Всього: <strong style="color:var(--clr-text)" id="topicsCount">@Model.Count()</strong>
+        </span>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <i class="bi bi-collection"></i>
+            <p>Тем ще немає</p>
+        </div>
+    }
+    else
+    {
+        <div class="topics-table-wrap">
+            <table class="topics-table">
+                <thead>
+                    <tr>
+                        <th>Назва теми</th>
+                        <th>Предмет</th>
+                        <th style="width:100px">Дії</th>
+                    </tr>
+                </thead>
+                <tbody id="topicsBody">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="topic-row" data-name="@item.Name.ToLower()">
+                            <td>
+                                <div class="topic-cell">
+                                    <div class="topic-icon"><i class="bi bi-bookmark"></i></div>
+                                    <span style="font-weight:500">@item.Name</span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="subject-badge">
+                                    <i class="bi bi-mortarboard"></i> @item.Subject?.Name
+                                </span>
+                            </td>
+                            <td>
+                                <div class="action-cell">
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn-tbl" title="Деталі">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn-tbl" title="Редагувати">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn-tbl danger" title="Видалити">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+</div>
+</div>
+
+@section Scripts {
+<script>
+    function filterTopics() {
+        const q = document.getElementById('searchInput').value.toLowerCase();
+        const rows = document.querySelectorAll('.topic-row');
+        let visible = 0;
+        rows.forEach(row => {
+            const show = !q || row.dataset.name.includes(q);
+            row.style.display = show ? '' : 'none';
+            if (show) visible++;
+        });
+        document.getElementById('topicsCount').textContent = visible;
+    }
+</script>
+}

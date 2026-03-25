@@ -1,0 +1,98 @@
+@model ZNOWay.Models.User
+@{
+    ViewData["Title"] = "Додати користувача";
+}
+
+<style>
+    .form-wrap {
+        padding: 36px 0 60px;
+    }
+    .form-card {
+        background: var(--clr-card);
+        border: 1px solid var(--clr-border);
+        border-radius: calc(var(--radius) * 1.5);
+        padding: 40px 44px;
+        max-width: 520px;
+        position: relative; overflow: hidden;
+    }
+    .form-card::before {
+        content: '';
+        position: absolute; top: 0; left: 0; right: 0; height: 3px;
+        background: linear-gradient(90deg, var(--clr-accent2), var(--clr-accent));
+    }
+    .form-group { margin-bottom: 20px; }
+    .form-label-zno {
+        display: block; font-size: .83rem; font-weight: 600;
+        color: var(--clr-muted); margin-bottom: 8px;
+    }
+    .input-wrap { position: relative; }
+    .input-icon {
+        position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+        color: var(--clr-muted); pointer-events: none;
+    }
+    .input-wrap .form-control-zno { padding-left: 38px; }
+    .form-actions { display: flex; gap: 12px; margin-top: 28px; }
+    .btn-cancel {
+        padding: 11px 24px; border-radius: var(--radius-sm);
+        border: 1px solid var(--clr-border); background: var(--clr-surface);
+        color: var(--clr-muted); font-family: var(--font-body); font-weight: 600;
+        text-decoration: none; display: inline-flex; align-items: center; gap: 7px;
+        transition: all .15s;
+    }
+    .btn-cancel:hover { color: var(--clr-text); border-color: var(--clr-accent); }
+</style>
+
+<div class="form-wrap">
+<div class="container">
+
+    <div class="page-header mb-4">
+        <h1><i class="bi bi-person-plus me-2" style="color:var(--clr-accent)"></i>Додати користувача</h1>
+        <p style="color:var(--clr-muted);margin-top:6px">Створення нового акаунту на платформі</p>
+    </div>
+
+    <div class="form-card">
+        <form asp-action="Create">
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label class="form-label-zno">Email адреса</label>
+                <div class="input-wrap">
+                    <i class="bi bi-envelope input-icon"></i>
+                    <input asp-for="Email" class="form-control-zno" type="email" placeholder="user@email.com" />
+                </div>
+                <span asp-validation-for="Email" class="text-danger" style="font-size:.78rem"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label-zno">Пароль</label>
+                <div class="input-wrap">
+                    <i class="bi bi-lock input-icon"></i>
+                    <input asp-for="PasswordHash" type="password" class="form-control-zno" placeholder="Мінімум 6 символів" />
+                </div>
+                <span asp-validation-for="PasswordHash" class="text-danger" style="font-size:.78rem"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label-zno">Роль</label>
+                <div class="input-wrap">
+                    <i class="bi bi-shield input-icon"></i>
+                    <select asp-for="Role" class="form-control-zno" style="padding-left:38px">
+                        <option value="Student">👤 Student</option>
+                        <option value="Admin">🛡️ Admin</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-zno d-flex align-items-center gap-2">
+                    <i class="bi bi-person-plus"></i> Створити
+                </button>
+                <a asp-action="Index" class="btn-cancel">
+                    <i class="bi bi-arrow-left"></i> Назад
+                </a>
+            </div>
+        </form>
+    </div>
+
+</div>
+</div>

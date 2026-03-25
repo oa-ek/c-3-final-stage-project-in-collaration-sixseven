@@ -1,0 +1,178 @@
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Вхід";
+}
+
+<style>
+    .auth-wrap {
+        min-height: calc(100vh - var(--nav-h) - 80px);
+        display: flex; align-items: center; justify-content: center;
+        padding: 48px 16px;
+    }
+    .auth-card {
+        background: var(--clr-card);
+        border: 1px solid var(--clr-border);
+        border-radius: calc(var(--radius) * 1.5);
+        padding: 48px 44px;
+        width: 100%; max-width: 440px;
+        position: relative;
+        overflow: hidden;
+    }
+    .auth-card::before {
+        content: '';
+        position: absolute; top: 0; left: 0; right: 0; height: 3px;
+        background: linear-gradient(90deg, var(--clr-accent), var(--clr-accent2));
+    }
+    .auth-logo {
+        font-family: var(--font-display);
+        font-weight: 900; font-size: 1.5rem;
+        background: linear-gradient(135deg, var(--clr-accent), var(--clr-accent2));
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-align: center; margin-bottom: 8px;
+    }
+    .auth-card h2 {
+        font-family: var(--font-display); font-weight: 700;
+        font-size: 1.4rem; text-align: center; margin-bottom: 6px;
+    }
+    .auth-card .auth-sub {
+        color: var(--clr-muted); text-align: center; font-size: .875rem; margin-bottom: 36px;
+    }
+    .form-group { margin-bottom: 20px; }
+    .form-label-zno {
+        display: block; font-size: .83rem; font-weight: 600;
+        color: var(--clr-muted); margin-bottom: 8px; letter-spacing: .02em;
+    }
+    .input-wrap { position: relative; }
+    .input-icon {
+        position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+        color: var(--clr-muted); pointer-events: none; font-size: 1rem;
+    }
+    .input-wrap .form-control-zno { padding-left: 38px; }
+    .toggle-pw {
+        position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+        background: none; border: none; color: var(--clr-muted); cursor: pointer;
+        font-size: 1rem; padding: 4px;
+        transition: color .15s;
+    }
+    .toggle-pw:hover { color: var(--clr-text); }
+    .form-error {
+        color: #f87171; font-size: .78rem; margin-top: 5px;
+        display: flex; align-items: center; gap: 5px;
+    }
+    .btn-submit {
+        width: 100%; padding: 13px;
+        background: linear-gradient(135deg, var(--clr-accent), #3a6ee8);
+        color: #fff; border: none; border-radius: var(--radius-sm);
+        font-family: var(--font-body); font-weight: 700; font-size: 1rem;
+        cursor: pointer; transition: all .2s; margin-top: 8px;
+        display: flex; align-items: center; justify-content: center; gap: 9px;
+    }
+    .btn-submit:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 24px rgba(79,138,255,.4);
+    }
+    .btn-submit:active { transform: translateY(0); }
+    .divider {
+        display: flex; align-items: center; gap: 14px;
+        margin: 28px 0; color: var(--clr-muted); font-size: .8rem;
+    }
+    .divider::before, .divider::after {
+        content: ''; flex: 1; height: 1px; background: var(--clr-border);
+    }
+    .auth-footer {
+        text-align: center; color: var(--clr-muted); font-size: .875rem; margin-top: 28px;
+    }
+    .auth-footer a { color: var(--clr-accent); text-decoration: none; font-weight: 600; }
+    .auth-footer a:hover { text-decoration: underline; }
+    .remember-row {
+        display: flex; align-items: center; justify-content: space-between;
+        margin-bottom: 24px;
+    }
+    .remember-check { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .remember-check input[type=checkbox] { accent-color: var(--clr-accent); width: 15px; height: 15px; cursor: pointer; }
+    .remember-check span { color: var(--clr-muted); font-size: .85rem; }
+    .forgot-link { color: var(--clr-accent); font-size: .85rem; text-decoration: none; }
+    .forgot-link:hover { text-decoration: underline; }
+</style>
+
+<div class="auth-wrap">
+    <div class="auth-card">
+        <div class="auth-logo">ZNOway</div>
+        <h2>Вхід в акаунт</h2>
+        <p class="auth-sub">Раді бачити тебе знову 👋</p>
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert-zno alert-error-zno mb-4">
+                <i class="bi bi-exclamation-circle me-2"></i>
+                Невірний email або пароль. Спробуй ще раз.
+            </div>
+        }
+
+        <form asp-action="Login" asp-controller="Account" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label class="form-label-zno" asp-for="Email">Email</label>
+                <div class="input-wrap">
+                    <i class="bi bi-envelope input-icon"></i>
+                    <input asp-for="Email" class="form-control-zno" type="email"
+                           placeholder="your@email.com" autocomplete="email" />
+                </div>
+                <span asp-validation-for="Email" class="form-error">
+                    <i class="bi bi-exclamation-circle"></i>
+                    <span class="field-validation-error"></span>
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label-zno" asp-for="Password">Пароль</label>
+                <div class="input-wrap">
+                    <i class="bi bi-lock input-icon"></i>
+                    <input asp-for="Password" class="form-control-zno" type="password"
+                           id="passwordInput" placeholder="••••••••" autocomplete="current-password" />
+                    <button type="button" class="toggle-pw" onclick="togglePw()">
+                        <i class="bi bi-eye" id="pwIcon"></i>
+                    </button>
+                </div>
+                <span asp-validation-for="Password" class="form-error">
+                    <i class="bi bi-exclamation-circle"></i>
+                    <span class="field-validation-error"></span>
+                </span>
+            </div>
+
+            <div class="remember-row">
+                <label class="remember-check">
+                    <input type="checkbox" asp-for="RememberMe" />
+                    <span>Запам'ятати мене</span>
+                </label>
+                <a href="/Account/ForgotPassword" class="forgot-link">Забув пароль?</a>
+            </div>
+
+            <button type="submit" class="btn-submit">
+                <i class="bi bi-box-arrow-in-right"></i> Увійти
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            Ще немає акаунту? <a href="/Account/Register">Зареєструватись</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    function togglePw() {
+        const inp = document.getElementById('passwordInput');
+        const ico = document.getElementById('pwIcon');
+        if (inp.type === 'password') {
+            inp.type = 'text';
+            ico.className = 'bi bi-eye-slash';
+        } else {
+            inp.type = 'password';
+            ico.className = 'bi bi-eye';
+        }
+    }
+</script>
+}

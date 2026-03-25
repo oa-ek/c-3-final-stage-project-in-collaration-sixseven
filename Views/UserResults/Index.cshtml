@@ -1,0 +1,17 @@
+@model IEnumerable<ZNOWay.Models.UserResult>
+@{ ViewData["Title"] = "����������"; }
+<h2>����������</h2>
+<table class="table">
+    <thead><tr><th>����������</th><th>����</th><th>����</th><th>��� (���)</th><th></th></tr></thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>@item.User?.Email</td>
+            <td>@item.Test?.Name</td>
+            <td>@item.Score</td>
+            <td>@item.TimeSpent</td>
+            <td><a asp-action="Delete" asp-route-id="@item.Id">��������</a></td>
+        </tr>
+    }
+    </tbody>
+</table>

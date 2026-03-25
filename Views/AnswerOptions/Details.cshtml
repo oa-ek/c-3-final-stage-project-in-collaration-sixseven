@@ -1,0 +1,5 @@
+@model ZNOWay.Models.AnswerOption
+@{ ViewData["Title"] = "����� �������"; }
+<h2>@Model.Text</h2>
+<p>���������: @(Model.IsCorrect ? "���" : "ͳ")</p>
+<a asp-action="Index" class="btn btn-secondary">�����</a>

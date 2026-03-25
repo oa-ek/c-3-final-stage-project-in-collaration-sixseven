@@ -1,0 +1,7 @@
+@model ZNOWay.Models.Test
+@{ ViewData["Title"] = "����� �����"; }
+<h2>@Model.Name</h2>
+<p>�������: @Model.Subject?.Name</p>
+<p>���: @Model.Type</p>
+<p>���: @Model.TimeLimit ��</p>
+<a asp-action="Index" class="btn btn-secondary">�����</a>

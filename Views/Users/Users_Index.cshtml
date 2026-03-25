@@ -1,0 +1,193 @@
+@model IEnumerable<ZNOWay.Models.User>
+@{
+    ViewData["Title"] = "Користувачі";
+    ViewData["ActivePage"] = "Users";
+}
+
+<style>
+    .users-wrap { padding: 36px 0 60px; }
+
+    .users-table-wrap {
+        background: var(--clr-card);
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius);
+        overflow: hidden;
+    }
+
+    .users-table {
+        width: 100%; border-collapse: collapse; margin: 0;
+    }
+    .users-table thead tr {
+        background: var(--clr-surface);
+        border-bottom: 1px solid var(--clr-border);
+    }
+    .users-table thead th {
+        padding: 14px 20px;
+        font-size: .75rem; font-weight: 700;
+        color: var(--clr-muted); text-transform: uppercase; letter-spacing: .07em;
+        text-align: left;
+    }
+    .users-table tbody tr {
+        border-bottom: 1px solid var(--clr-border);
+        transition: background .15s;
+    }
+    .users-table tbody tr:last-child { border-bottom: none; }
+    .users-table tbody tr:hover { background: rgba(255,255,255,.03); }
+    .users-table tbody td {
+        padding: 14px 20px; font-size: .9rem; vertical-align: middle;
+    }
+
+    /* Avatar */
+    .user-avatar {
+        width: 36px; height: 36px; border-radius: 50%;
+        background: linear-gradient(135deg, var(--clr-accent2), var(--clr-accent));
+        display: inline-flex; align-items: center; justify-content: center;
+        font-weight: 700; font-size: .875rem; color: #fff;
+        margin-right: 10px; flex-shrink: 0;
+    }
+    .user-cell { display: flex; align-items: center; }
+    .user-email { font-weight: 500; }
+
+    /* Role badge */
+    .role-badge {
+        display: inline-flex; align-items: center; gap: 5px;
+        padding: 4px 12px; border-radius: 99px;
+        font-size: .75rem; font-weight: 600;
+    }
+    .role-admin {
+        background: rgba(248,113,113,.12); border: 1px solid rgba(248,113,113,.3);
+        color: #f87171;
+    }
+    .role-student {
+        background: rgba(79,138,255,.12); border: 1px solid rgba(79,138,255,.3);
+        color: var(--clr-accent);
+    }
+
+    /* Actions */
+    .action-cell { display: flex; gap: 6px; }
+    .btn-tbl {
+        width: 32px; height: 32px; border-radius: var(--radius-sm);
+        display: inline-flex; align-items: center; justify-content: center;
+        border: 1px solid var(--clr-border); background: var(--clr-surface);
+        color: var(--clr-muted); text-decoration: none; font-size: .82rem;
+        transition: all .15s;
+    }
+    .btn-tbl:hover { color: var(--clr-accent); border-color: var(--clr-accent); }
+    .btn-tbl.danger:hover { color: #f87171; border-color: #f87171; }
+
+    /* Empty */
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--clr-muted); }
+    .empty-state i { font-size: 2.5rem; display: block; margin-bottom: 12px; opacity: .4; }
+
+    /* Search */
+    .search-wrap { position: relative; max-width: 320px; }
+    .search-wrap i { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--clr-muted); pointer-events: none; }
+    .search-wrap input { padding-left: 38px; }
+</style>
+
+<div class="users-wrap">
+<div class="container">
+
+    <div class="page-header d-flex align-items-start justify-content-between flex-wrap gap-3 mb-4">
+        <div>
+            <h1><i class="bi bi-people me-2" style="color:var(--clr-accent)"></i>Користувачі</h1>
+            <p style="color:var(--clr-muted);margin-top:6px">Управління акаунтами платформи</p>
+        </div>
+        <a asp-action="Create" class="btn-zno d-flex align-items-center gap-2">
+            <i class="bi bi-person-plus"></i> Додати користувача
+        </a>
+    </div>
+
+    <!-- Search -->
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
+        <div class="search-wrap">
+            <i class="bi bi-search"></i>
+            <input type="text" class="form-control-zno" id="searchInput"
+                   placeholder="Пошук за email..." oninput="filterUsers()" />
+        </div>
+        <span style="color:var(--clr-muted);font-size:.875rem">
+            Всього: <strong style="color:var(--clr-text)" id="usersCount">@Model.Count()</strong>
+        </span>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <i class="bi bi-people"></i>
+            <p>Користувачів ще немає</p>
+        </div>
+    }
+    else
+    {
+        <div class="users-table-wrap">
+            <table class="users-table" id="usersTable">
+                <thead>
+                    <tr>
+                        <th>Користувач</th>
+                        <th>Роль</th>
+                        <th style="width:100px">Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr class="user-row" data-email="@user.Email.ToLower()">
+                            <td>
+                                <div class="user-cell">
+                                    <div class="user-avatar">
+                                        @user.Email[0].ToString().ToUpper()
+                                    </div>
+                                    <span class="user-email">@user.Email</span>
+                                </div>
+                            </td>
+                            <td>
+                                @if (user.Role?.ToLower() == "admin")
+                                {
+                                    <span class="role-badge role-admin">
+                                        <i class="bi bi-shield-fill"></i> Admin
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="role-badge role-student">
+                                        <i class="bi bi-person"></i> Student
+                                    </span>
+                                }
+                            </td>
+                            <td>
+                                <div class="action-cell">
+                                    <a asp-action="Edit" asp-route-id="@user.Id"
+                                       class="btn-tbl" title="Редагувати">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@user.Id"
+                                       class="btn-tbl danger" title="Видалити">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+</div>
+</div>
+
+@section Scripts {
+<script>
+    function filterUsers() {
+        const q = document.getElementById('searchInput').value.toLowerCase();
+        const rows = document.querySelectorAll('.user-row');
+        let visible = 0;
+        rows.forEach(row => {
+            const show = !q || row.dataset.email.includes(q);
+            row.style.display = show ? '' : 'none';
+            if (show) visible++;
+        });
+        document.getElementById('usersCount').textContent = visible;
+    }
+</script>
+}

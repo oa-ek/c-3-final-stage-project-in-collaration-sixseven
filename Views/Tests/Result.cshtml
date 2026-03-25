@@ -1,0 +1,309 @@
+@model TestResultViewModel
+@{
+    ViewData["Title"] = "Результат тесту";
+    var score = Model?.Score ?? 78;
+    var total = Model?.TotalQuestions ?? 40;
+    var correct = Model?.CorrectAnswers ?? 31;
+    var wrong = total - correct;
+    var pct = (int)Math.Round((double)correct / total * 100);
+    var nmt = Model?.NMTScore ?? 158;
+    var nmtPct = (int)((nmt - 100.0) / 100.0 * 100);
+    var grade = nmt >= 180 ? "Відмінно" : nmt >= 160 ? "Добре" : nmt >= 140 ? "Задовільно" : "Потрібно працювати";
+    var gradeColor = nmt >= 180 ? "var(--clr-success)" : nmt >= 160 ? "var(--clr-accent)" : nmt >= 140 ? "var(--clr-warn)" : "#f87171";
+}
+
+<style>
+    .result-wrap { padding: 48px 0 72px; }
+
+    /* ─── HERO SCORE ─── */
+    .result-hero {
+        text-align: center; margin-bottom: 48px;
+    }
+    .result-hero h1 {
+        font-family: var(--font-display); font-size: clamp(1.4rem, 3vw, 2rem);
+        font-weight: 700; margin-bottom: 6px;
+    }
+    .result-hero p { color: var(--clr-muted); }
+
+    .score-ring-wrap {
+        display: flex; justify-content: center; gap: 48px; flex-wrap: wrap;
+        margin: 36px 0;
+    }
+    .score-ring {
+        display: flex; flex-direction: column; align-items: center; gap: 14px;
+    }
+    .ring-svg { position: relative; }
+    .ring-num {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .ring-num .big { font-family: var(--font-display); font-size: 2rem; font-weight: 900; }
+    .ring-num .small { color: var(--clr-muted); font-size: .75rem; }
+    .ring-label { font-weight: 600; font-size: .9rem; color: var(--clr-muted); }
+
+    /* NMT Scale */
+    .nmt-block {
+        background: var(--clr-card); border: 1px solid var(--clr-border);
+        border-radius: var(--radius); padding: 28px 32px; margin-bottom: 32px;
+        position: relative; overflow: hidden;
+    }
+    .nmt-block::before {
+        content: '';
+        position: absolute; inset: 0;
+        background: radial-gradient(circle at 100% 50%, rgba(79,138,255,.08), transparent 60%);
+    }
+    .nmt-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; }
+    .nmt-score {
+        font-family: var(--font-display); font-size: 4rem; font-weight: 900; line-height: 1;
+        background: linear-gradient(135deg, var(--clr-accent), var(--clr-accent2));
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    .nmt-label { color: var(--clr-muted); font-size: .875rem; margin-top: 4px; }
+    .nmt-grade {
+        font-family: var(--font-display); font-size: 1.1rem; font-weight: 700;
+        padding: 8px 20px; border-radius: 99px; border: 2px solid;
+    }
+    .nmt-scale { margin-top: 8px; }
+    .nmt-scale-track {
+        height: 14px; background: var(--clr-border); border-radius: 99px;
+        overflow: hidden; position: relative;
+    }
+    .nmt-scale-fill {
+        height: 100%; border-radius: 99px;
+        background: linear-gradient(90deg, #f87171 0%, var(--clr-warn) 30%, var(--clr-accent) 60%, var(--clr-success) 100%);
+        position: relative; transition: width 1.2s cubic-bezier(.4,0,.2,1);
+    }
+    .nmt-scale-fill::after {
+        content: '';
+        position: absolute; right: -1px; top: -2px; bottom: -2px;
+        width: 4px; background: #fff; border-radius: 99px;
+        box-shadow: 0 0 8px rgba(255,255,255,.5);
+    }
+    .nmt-scale-labels { display: flex; justify-content: space-between; color: var(--clr-muted); font-size: .75rem; margin-top: 6px; }
+
+    /* ─── STATS GRID ─── */
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+    .stat-cell {
+        background: var(--clr-card); border: 1px solid var(--clr-border);
+        border-radius: var(--radius); padding: 22px;
+        text-align: center;
+    }
+    .stat-cell .val { font-family: var(--font-display); font-size: 1.8rem; font-weight: 900; }
+    .stat-cell .lbl { color: var(--clr-muted); font-size: .8rem; margin-top: 4px; }
+
+    /* ─── ANSWERS REVIEW ─── */
+    .review-card {
+        background: var(--clr-card); border: 1px solid var(--clr-border);
+        border-radius: var(--radius); padding: 28px; margin-bottom: 20px;
+    }
+    .review-card h3 { font-family: var(--font-display); font-size: 1rem; font-weight: 700; margin-bottom: 20px; }
+
+    .review-item {
+        border-bottom: 1px solid var(--clr-border); padding: 16px 0;
+        display: flex; gap: 14px; align-items: flex-start;
+    }
+    .review-item:last-child { border-bottom: none; }
+    .review-status {
+        width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center; font-size: .9rem;
+    }
+    .review-status.ok  { background: rgba(34,197,94,.12); color: var(--clr-success); }
+    .review-status.bad { background: rgba(248,113,113,.12); color: #f87171; }
+    .review-body { flex: 1; }
+    .review-q { font-weight: 600; font-size: .9rem; margin-bottom: 8px; }
+    .review-answers { display: flex; flex-direction: column; gap: 5px; }
+    .review-ans {
+        font-size: .83rem; padding: 6px 12px; border-radius: var(--radius-sm);
+        display: flex; align-items: center; gap: 8px;
+    }
+    .review-ans.correct-ans { background: rgba(34,197,94,.1); color: var(--clr-success); }
+    .review-ans.wrong-ans   { background: rgba(248,113,113,.1); color: #f87171; }
+    .review-ans.user-ans    { font-weight: 600; }
+
+    /* ─── ACTIONS ─── */
+    .result-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 36px; }
+
+    @@media (max-width: 768px) {
+        .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        .score-ring-wrap { gap: 28px; }
+        .nmt-score { font-size: 3rem; }
+    }
+</style>
+
+<div class="result-wrap">
+<div class="container">
+
+    <!-- Header -->
+    <div class="result-hero">
+        <div style="font-size:3rem; margin-bottom:12px">
+            @(nmt >= 180 ? "🏆" : nmt >= 160 ? "🎯" : nmt >= 140 ? "📈" : "💪")
+        </div>
+        <h1>@(Model?.TestName ?? "Математика — Тригонометрія")</h1>
+        <p>Тест завершено · @(Model?.TimeSpent ?? "14 хвилин 32 секунди")</p>
+    </div>
+
+    <!-- NMT Score Block -->
+    <div class="nmt-block">
+        <div class="nmt-top">
+            <div>
+                <div style="font-size:.78rem;color:var(--clr-muted);font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">
+                    Прогноз балу НМТ
+                </div>
+                <div class="nmt-score">@nmt</div>
+                <div class="nmt-label">зі 100 можливих до 200</div>
+            </div>
+            <div class="nmt-grade" style="color:@gradeColor; border-color:@gradeColor; background: rgba(79,138,255,.05)">
+                @grade
+            </div>
+        </div>
+        <div class="nmt-scale">
+            <div class="nmt-scale-track">
+                <div class="nmt-scale-fill" id="nmtFill" style="width:0%"></div>
+            </div>
+            <div class="nmt-scale-labels">
+                <span>100</span>
+                <span>125</span>
+                <span>150</span>
+                <span>175</span>
+                <span>200</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+        <div class="stat-cell">
+            <div class="val">@pct%</div>
+            <div class="lbl">Загальний результат</div>
+        </div>
+        <div class="stat-cell">
+            <div class="val" style="color:var(--clr-success)">@correct</div>
+            <div class="lbl">Правильних відповідей</div>
+        </div>
+        <div class="stat-cell">
+            <div class="val" style="color:#f87171">@wrong</div>
+            <div class="lbl">Неправильних відповідей</div>
+        </div>
+        <div class="stat-cell">
+            <div class="val">@total</div>
+            <div class="lbl">Всього питань</div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Answers Review -->
+        <div class="col-lg-8">
+            <div class="review-card">
+                <h3>Розбір відповідей</h3>
+
+                @{
+                    var review = new[] {
+                        (true,  "Яке значення sin(30°)?",
+                                "Твоя відповідь: A — 1/2 ✓",
+                                "Правильна: 1/2"),
+                        (false, "Чому дорівнює cos(60°)?",
+                                "Твоя відповідь: A — √3/2 ✗",
+                                "Правильна: B — 1/2"),
+                        (true,  "Формула основного тригонометричного тотожності:",
+                                "Твоя відповідь: A — sin²x + cos²x = 1 ✓",
+                                "Правильна: sin²x + cos²x = 1"),
+                        (false, "Яке значення tg(45°)?",
+                                "Твоя відповідь: B — 0 ✗",
+                                "Правильна: A — 1"),
+                        (true,  "sin(90°) дорівнює:",
+                                "Твоя відповідь: C — 1 ✓",
+                                "Правильна: 1"),
+                    };
+                }
+
+                @foreach (var (isOk, qText, userAns, corrAns) in review)
+                {
+                    <div class="review-item">
+                        <div class="review-status @(isOk ? "ok" : "bad")">
+                            <i class="bi @(isOk ? "bi-check-lg" : "bi-x-lg")"></i>
+                        </div>
+                        <div class="review-body">
+                            <div class="review-q">@qText</div>
+                            <div class="review-answers">
+                                <div class="review-ans user-ans @(isOk ? "correct-ans" : "wrong-ans")">
+                                    <i class="bi @(isOk ? "bi-check-circle" : "bi-x-circle")"></i> @userAns
+                                </div>
+                                @if (!isOk)
+                                {
+                                    <div class="review-ans correct-ans">
+                                        <i class="bi bi-check-circle"></i> @corrAns
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+
+        <!-- Sidebar actions -->
+        <div class="col-lg-4">
+            <div class="review-card" style="position:sticky;top:84px">
+                <h3>Що далі?</h3>
+                <div style="display:flex;flex-direction:column;gap:10px">
+                    <a href="/Mistakes" class="btn-zno btn-ghost-zno" style="justify-content:flex-start">
+                        <i class="bi bi-arrow-repeat" style="color:#f87171"></i>
+                        Робота над помилками
+                        <span class="badge-zno badge-blue ms-auto">@wrong</span>
+                    </a>
+                    <a href="/Tests/Take/@(Model?.TestId)" class="btn-zno btn-ghost-zno" style="justify-content:flex-start">
+                        <i class="bi bi-arrow-clockwise" style="color:var(--clr-accent)"></i>
+                        Пройти ще раз
+                    </a>
+                    <a href="/Tests" class="btn-zno btn-ghost-zno" style="justify-content:flex-start">
+                        <i class="bi bi-grid" style="color:var(--clr-accent2)"></i>
+                        Інші тести
+                    </a>
+                    <a href="/Dashboard" class="btn-zno btn-primary-zno" style="justify-content:center;margin-top:8px">
+                        <i class="bi bi-bar-chart-line"></i> До кабінету
+                    </a>
+                </div>
+
+                <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--clr-border)">
+                    <div style="color:var(--clr-muted);font-size:.78rem;margin-bottom:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase">
+                        Прогрес по темі
+                    </div>
+                    @{
+                        var topicProgress = new[] {
+                            ("Базові значення", 90),
+                            ("Формули зведення", 65),
+                            ("Тригонометричні рівняння", 40),
+                        };
+                    }
+                    @foreach (var (topic, tp) in topicProgress)
+                    {
+                        <div style="margin-bottom:12px">
+                            <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:5px">
+                                <span>@topic</span>
+                                <span style="color:var(--clr-muted)">@tp%</span>
+                            </div>
+                            <div class="progress-zno">
+                                <div class="progress-zno-fill" style="width:@tp%"></div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+@section Scripts {
+<script>
+    // Animate NMT scale on load
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            document.getElementById('nmtFill').style.width = '@nmtPct%';
+        }, 300);
+    });
+</script>
+}

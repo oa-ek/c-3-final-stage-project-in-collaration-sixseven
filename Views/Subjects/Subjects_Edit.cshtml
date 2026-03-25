@@ -1,0 +1,78 @@
+@model ZNOWay.Models.Subject
+@{
+    ViewData["Title"] = "Редагувати предмет";
+}
+
+<style>
+    .form-wrap { padding: 36px 0 60px; }
+    .form-card {
+        background: var(--clr-card); border: 1px solid var(--clr-border);
+        border-radius: calc(var(--radius) * 1.5); padding: 40px 44px;
+        max-width: 480px; position: relative; overflow: hidden;
+    }
+    .form-card::before {
+        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+        background: linear-gradient(90deg, var(--clr-accent), var(--clr-accent2));
+    }
+    .form-group { margin-bottom: 20px; }
+    .form-label-zno {
+        display: block; font-size: .83rem; font-weight: 600;
+        color: var(--clr-muted); margin-bottom: 8px;
+    }
+    .input-wrap { position: relative; }
+    .input-icon { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--clr-muted); pointer-events: none; }
+    .input-wrap .form-control-zno { padding-left: 38px; }
+    .form-actions { display: flex; gap: 12px; margin-top: 28px; }
+    .btn-cancel {
+        padding: 11px 24px; border-radius: var(--radius-sm);
+        border: 1px solid var(--clr-border); background: var(--clr-surface);
+        color: var(--clr-muted); font-family: var(--font-body); font-weight: 600;
+        text-decoration: none; display: inline-flex; align-items: center; gap: 7px;
+        transition: all .15s;
+    }
+    .btn-cancel:hover { color: var(--clr-text); border-color: var(--clr-accent); }
+    .current-name {
+        background: var(--clr-surface); border: 1px solid var(--clr-border);
+        border-radius: var(--radius-sm); padding: 10px 16px;
+        font-size: .85rem; color: var(--clr-muted); margin-bottom: 24px;
+        display: flex; align-items: center; gap: 8px;
+    }
+</style>
+
+<div class="form-wrap">
+<div class="container">
+
+    <div class="page-header mb-4">
+        <h1><i class="bi bi-pencil-square me-2" style="color:var(--clr-accent)"></i>Редагувати предмет</h1>
+    </div>
+
+    <div class="form-card">
+        <div class="current-name">
+            <i class="bi bi-book" style="color:var(--clr-accent)"></i>
+            Поточна назва: <strong>@Model.Name</strong>
+        </div>
+
+        <form asp-action="Edit">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label class="form-label-zno">Нова назва</label>
+                <div class="input-wrap">
+                    <i class="bi bi-pencil input-icon"></i>
+                    <input asp-for="Name" class="form-control-zno" />
+                </div>
+                <span asp-validation-for="Name" class="text-danger" style="font-size:.78rem"></span>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn-zno d-flex align-items-center gap-2">
+                    <i class="bi bi-check-lg"></i> Зберегти
+                </button>
+                <a asp-action="Index" class="btn-cancel">
+                    <i class="bi bi-arrow-left"></i> Назад
+                </a>
+            </div>
+        </form>
+    </div>
+
+</div>
+</div>

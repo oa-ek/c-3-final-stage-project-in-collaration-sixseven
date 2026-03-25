@@ -1,0 +1,91 @@
+@model ZNOWay.Models.User
+@{
+    ViewData["Title"] = "Видалити користувача";
+}
+
+<style>
+    .delete-wrap { padding: 36px 0 60px; }
+    .delete-card {
+        background: var(--clr-card);
+        border: 1px solid rgba(248,113,113,.3);
+        border-radius: calc(var(--radius) * 1.5);
+        padding: 40px 44px;
+        max-width: 480px;
+        position: relative; overflow: hidden;
+        text-align: center;
+    }
+    .delete-card::before {
+        content: '';
+        position: absolute; top: 0; left: 0; right: 0; height: 3px;
+        background: linear-gradient(90deg, #f87171, #ef4444);
+    }
+    .delete-icon {
+        width: 64px; height: 64px; border-radius: 50%;
+        background: rgba(248,113,113,.12); border: 1px solid rgba(248,113,113,.3);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.6rem; color: #f87171; margin: 0 auto 20px;
+    }
+    .delete-card h2 { font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 10px; }
+    .delete-card p { color: var(--clr-muted); font-size: .9rem; margin-bottom: 28px; }
+    .user-chip {
+        display: inline-flex; align-items: center; gap: 10px;
+        background: var(--clr-surface); border: 1px solid var(--clr-border);
+        border-radius: 99px; padding: 8px 16px; margin-bottom: 32px;
+    }
+    .user-chip-avatar {
+        width: 28px; height: 28px; border-radius: 50%;
+        background: linear-gradient(135deg, var(--clr-accent2), var(--clr-accent));
+        display: flex; align-items: center; justify-content: center;
+        font-size: .75rem; font-weight: 700; color: #fff;
+    }
+    .user-chip-email { font-weight: 600; font-size: .875rem; }
+    .form-actions { display: flex; gap: 12px; justify-content: center; }
+    .btn-danger-zno {
+        padding: 11px 28px; border-radius: var(--radius-sm);
+        background: #ef4444; border: none; color: #fff;
+        font-family: var(--font-body); font-weight: 700; font-size: .95rem;
+        cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+        transition: all .2s;
+    }
+    .btn-danger-zno:hover { background: #dc2626; transform: translateY(-1px); }
+    .btn-cancel {
+        padding: 11px 24px; border-radius: var(--radius-sm);
+        border: 1px solid var(--clr-border); background: var(--clr-surface);
+        color: var(--clr-muted); font-family: var(--font-body); font-weight: 600;
+        text-decoration: none; display: inline-flex; align-items: center; gap: 7px;
+        transition: all .15s;
+    }
+    .btn-cancel:hover { color: var(--clr-text); border-color: var(--clr-accent); }
+</style>
+
+<div class="delete-wrap">
+<div class="container d-flex justify-content-center">
+
+    <div class="delete-card">
+        <div class="delete-icon">
+            <i class="bi bi-person-x"></i>
+        </div>
+        <h2>Видалити користувача?</h2>
+        <p>Цю дію неможливо скасувати. Всі дані користувача будуть видалені назавжди.</p>
+
+        <div class="user-chip">
+            <div class="user-chip-avatar">@Model.Email[0].ToString().ToUpper()</div>
+            <span class="user-chip-email">@Model.Email</span>
+        </div>
+
+        <form asp-action="Delete">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <div class="form-actions">
+                <button type="submit" class="btn-danger-zno">
+                    <i class="bi bi-trash"></i> Видалити
+                </button>
+                <a asp-action="Index" class="btn-cancel">
+                    <i class="bi bi-arrow-left"></i> Скасувати
+                </a>
+            </div>
+        </form>
+    </div>
+
+</div>
+</div>
